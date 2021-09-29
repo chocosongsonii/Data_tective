@@ -149,7 +149,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
     // }
   }
 
-  static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[ //TODO: 스티커 추가하기
+  static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[ //TODO: 스티커 추가하기 (예영)
     <String, dynamic>{
       'name': 'heart',
       'img': 'assets/sticker1.png',
@@ -419,7 +419,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
                 ),
               ),
             ),
-            //TODO: 스티커로 가리는 거 추가
 
             // Flexible(
             //   flex: 10,
@@ -473,7 +472,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //TODO: 사진 저장 및 공유
+          //TODO: 사진 저장 및 공유 (헌재)
           },
         tooltip: 'Select',
         child: const Icon(Icons.image),
@@ -501,137 +500,6 @@ class BlurDraw extends CustomPainter {
     //     Paint()
     // );
 
-    for (TextLine textLine in textLines) {
-
-      touchyCanvas.drawRect(Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom), Paint()
-        ..color = Colors.transparent
-          , onTapDown: (_) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('개인고유식별 번호 노출 위험'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: [
-                          const Text('이 검열을 해제하시겠습니까?'),
-                          const Text('다시 검열하기 위해서는 이미지 편집을 새로 시작하셔야 합니다'),
-                          TextButton(
-                            child: Row(
-                              children: const [
-                                Text('자세히 보기',
-                                    style: TextStyle(color: Colors.red)),
-                                Icon(Icons.chevron_right),
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },)
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('취소'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },),
-                      TextButton(
-                        child: const Text('해제',
-                            style: TextStyle(color: Colors.red)),
-                        onPressed: () {
-                          textLines.remove(textLine);
-                          Navigator.of(context).pop();
-                        },)
-                    ],
-                  );
-                }
-            );
-          });
-
-      // touchyCanvas.drawRect(
-      //   Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom),
-      //   // face.boundingBox,
-      //   Paint()
-      //     ..style = PaintingStyle.stroke
-      //     ..color = Colors.greenAccent
-      //     ..strokeWidth = 4,
-      // );
-
-      // touchyCanvas.drawLine(
-      //   Offset(textBlock.rect.left, textBlock.rect.top - textBlock.rect.width/18),
-      //   Offset(textBlock.rect.right, textBlock.rect.top - textBlock.rect.width/18),
-      //   Paint()
-      //     ..color = Colors.red.withOpacity(0.8)
-      //     ..strokeWidth = textBlock.rect.width/9.5
-      //     ..style = PaintingStyle.fill,);
-      //
-      //
-      // TextPainter paintSpanId = TextPainter(
-      //   text: TextSpan(
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //       fontSize: textBlock.rect.width.toDouble()/10,
-      //       fontWeight: FontWeight.w400,
-      //     ),
-      //     text: "자동차 번호판 노출 위험!",
-      //   ),
-      //   textAlign: TextAlign.center,
-      //   textDirection: TextDirection.ltr,
-      // );
-
-      // touchyCanvas.drawLine(
-      //   Offset(textLine.rect.left, textLine.rect.top - textLine.rect.width/18),
-      //   Offset(textLine.rect.left + textLine.rect.width/25, textLine.rect.top - textLine.rect.width/18),
-      //   Paint()
-      //     ..color = Colors.red.withOpacity(0.8)
-      //     ..strokeWidth = textLine.rect.width/9.5
-      //     ..style = PaintingStyle.fill,);
-
-      // TextPainter paintSpanId = TextPainter(
-      //   text: TextSpan(
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //       fontSize: textLine.rect.width.toDouble()/10,
-      //       fontWeight: FontWeight.w400,
-      //     ),
-      //     text: "!",
-      //   ),
-      //   textAlign: TextAlign.center,
-      //   textDirection: TextDirection.ltr,
-      // );
-      //
-      // paintSpanId.layout();
-      // paintSpanId.paint(canvas, Offset(textLine.rect.left, textLine.rect.top - textLine.rect.width/9));
-
-      touchyCanvas.drawCircle(
-          Offset(textLine.rect.left, textLine.rect.top),
-        textLine.rect.width/15,
-        Paint()
-            ..color = Colors.red.withOpacity(0.8)
-            ..strokeWidth = textLine.rect.width/10
-            ..style = PaintingStyle.fill,);
-
-
-      TextPainter paintSpanId = TextPainter(
-        text: TextSpan(
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: textLine.rect.width.toDouble()/9,
-            fontWeight: FontWeight.w400,
-          ),
-          text: "!",
-        ),
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      );
-
-      paintSpanId.layout();
-      paintSpanId.paint(canvas, Offset(textLine.rect.left - textLine.rect.width/60, textLine.rect.top - textLine.rect.width/16));
-
-    }
-
     for (Face face in faces) {
 
       // var da = Offset(face.boundingBox.left, face.boundingBox.top);
@@ -647,51 +515,7 @@ class BlurDraw extends CustomPainter {
       touchyCanvas.drawRect(blueRect, Paint()
         ..color = Colors.transparent
           , onTapDown: (_) {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('초상권 침해'),
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: [
-                      const Text('이 검열을 해제하시겠습니까?'),
-                      const Text('다시 검열하기 위해서는 이미지 편집을 새로 시작하셔야 합니다'),
-                      TextButton(
-                        child: Row(
-                          children: const [
-                            Text('자세히 보기',
-                                style: TextStyle(color: Colors.red)),
-                            Icon(Icons.chevron_right),
-                          ],
-                        ),
-                        onPressed: () {
-                          showModalBottomSheet(context: context, builder: faceBottomSheet); //TODO: 팝업창 없애고 얼굴 눌렀을 때 BS 뜨게 하기
-                          // faces.remove(face);
-                          // Navigator.of(context).pop();
-                        },)
-                    ],
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    child: const Text('취소'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },),
-                  TextButton(
-                    child: const Text('해제',
-                    style: TextStyle(color: Colors.red)),
-                    onPressed: () {
-                      print('You clicked' "ID: ${face.trackingId}");
-                      faces.remove(face);
-                      Navigator.of(context).pop();
-                    },)
-                ],
-              );
-            }
-        );
+            showModalBottomSheet(context: context, builder: faceBottomSheet);
       });
 
       // touchyCanvas.drawRect(
@@ -779,6 +603,96 @@ class BlurDraw extends CustomPainter {
       paintSpanId.layout();
       paintSpanId.paint(canvas, Offset(face.boundingBox.left - face.boundingBox.width/60, face.boundingBox.top - face.boundingBox.width/16));
     }
+
+    for (TextLine textLine in textLines) {
+
+      touchyCanvas.drawRect(Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom), Paint()
+        ..color = Colors.transparent
+          , onTapDown: (_) {
+            showModalBottomSheet(context: context, builder: stickerBottomSheet);
+          });
+
+      // touchyCanvas.drawRect(
+      //   Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom),
+      //   // face.boundingBox,
+      //   Paint()
+      //     ..style = PaintingStyle.stroke
+      //     ..color = Colors.greenAccent
+      //     ..strokeWidth = 4,
+      // );
+
+      // touchyCanvas.drawLine(
+      //   Offset(textBlock.rect.left, textBlock.rect.top - textBlock.rect.width/18),
+      //   Offset(textBlock.rect.right, textBlock.rect.top - textBlock.rect.width/18),
+      //   Paint()
+      //     ..color = Colors.red.withOpacity(0.8)
+      //     ..strokeWidth = textBlock.rect.width/9.5
+      //     ..style = PaintingStyle.fill,);
+      //
+      //
+      // TextPainter paintSpanId = TextPainter(
+      //   text: TextSpan(
+      //     style: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: textBlock.rect.width.toDouble()/10,
+      //       fontWeight: FontWeight.w400,
+      //     ),
+      //     text: "자동차 번호판 노출 위험!",
+      //   ),
+      //   textAlign: TextAlign.center,
+      //   textDirection: TextDirection.ltr,
+      // );
+
+      // touchyCanvas.drawLine(
+      //   Offset(textLine.rect.left, textLine.rect.top - textLine.rect.width/18),
+      //   Offset(textLine.rect.left + textLine.rect.width/25, textLine.rect.top - textLine.rect.width/18),
+      //   Paint()
+      //     ..color = Colors.red.withOpacity(0.8)
+      //     ..strokeWidth = textLine.rect.width/9.5
+      //     ..style = PaintingStyle.fill,);
+
+      // TextPainter paintSpanId = TextPainter(
+      //   text: TextSpan(
+      //     style: TextStyle(
+      //       color: Colors.white,
+      //       fontSize: textLine.rect.width.toDouble()/10,
+      //       fontWeight: FontWeight.w400,
+      //     ),
+      //     text: "!",
+      //   ),
+      //   textAlign: TextAlign.center,
+      //   textDirection: TextDirection.ltr,
+      // );
+      //
+      // paintSpanId.layout();
+      // paintSpanId.paint(canvas, Offset(textLine.rect.left, textLine.rect.top - textLine.rect.width/9));
+
+      touchyCanvas.drawCircle(
+        Offset(textLine.rect.left, textLine.rect.top),
+        textLine.rect.width/15,
+        Paint()
+          ..color = Colors.red.withOpacity(0.8)
+          ..strokeWidth = textLine.rect.width/10
+          ..style = PaintingStyle.fill,);
+
+
+      TextPainter paintSpanId = TextPainter(
+        text: TextSpan(
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: textLine.rect.width.toDouble()/9,
+            fontWeight: FontWeight.w400,
+          ),
+          text: "!",
+        ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+
+      paintSpanId.layout();
+      paintSpanId.paint(canvas, Offset(textLine.rect.left - textLine.rect.width/60, textLine.rect.top - textLine.rect.width/16));
+
+    }
   }
 
   @override
@@ -820,51 +734,7 @@ class StickerDraw extends CustomPainter {
       touchyCanvas.drawRect(blueRect, Paint()
         ..color = Colors.transparent
           , onTapDown: (_) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('초상권 침해'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: [
-                          const Text('이 검열을 해제하시겠습니까?'),
-                          const Text('다시 검열하기 위해서는 이미지 편집을 새로 시작하셔야 합니다'),
-                          TextButton(
-                            child: Row(
-                              children: const [
-                                Text('자세히 보기',
-                                    style: TextStyle(color: Colors.red)),
-                                Icon(Icons.chevron_right),
-                              ],
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(context: context, builder: faceBottomSheet); //TODO: 팝업창 없애고 얼굴 눌렀을 때 BS 뜨게 하기
-                              // faces.remove(face);
-                              // Navigator.of(context).pop();
-                            },)
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('취소'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },),
-                      TextButton(
-                        child: const Text('해제',
-                            style: TextStyle(color: Colors.red)),
-                        onPressed: () {
-                          print('You clicked' "ID: ${face.trackingId}");
-                          faces.remove(face);
-                          Navigator.of(context).pop();
-                        },)
-                    ],
-                  );
-                }
-            );
+            showModalBottomSheet(context: context, builder: faceBottomSheet);
           });
 
       touchyCanvas.drawRect(
@@ -940,48 +810,7 @@ class StickerDraw extends CustomPainter {
       touchyCanvas.drawRect(Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom), Paint()
         ..color = Colors.transparent
           , onTapDown: (_) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('개인고유식별 번호 노출 위험'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: [
-                          const Text('이 검열을 해제하시겠습니까?'),
-                          const Text('다시 검열하기 위해서는 이미지 편집을 새로 시작하셔야 합니다'),
-                          TextButton(
-                            child: Row(
-                              children: const [
-                                Text('자세히 보기',
-                                    style: TextStyle(color: Colors.red)),
-                                Icon(Icons.chevron_right),
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },)
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text('취소'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },),
-                      TextButton(
-                        child: const Text('해제',
-                            style: TextStyle(color: Colors.red)),
-                        onPressed: () {
-                          textLines.remove(textLine);
-                          Navigator.of(context).pop();
-                        },)
-                    ],
-                  );
-                }
-            );
+            showModalBottomSheet(context: context, builder: stickerBottomSheet);
           });
 
       // touchyCanvas.drawRect(
@@ -1143,7 +972,18 @@ Widget faceBottomSheet(BuildContext context) {
     padding: EdgeInsets.all(24),
     child: Column(
       children: [
-        Text('초상권 침해') //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton)
+        Text('초상권 침해') //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+      ],
+    ),
+  );
+}
+
+Widget stickerBottomSheet(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.all(24),
+    child: Column(
+      children: [
+        Text('개인 고유 식별번호 노출') //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
       ],
     ),
   );
