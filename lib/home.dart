@@ -1,3 +1,4 @@
+import 'package:data_tective/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +8,8 @@ import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'image_pick.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
+import 'mouse_event.dart';
 
 ImagePicker picker = ImagePicker();
 
@@ -132,7 +135,10 @@ class _HomeState extends State<Home> {
         ),
       ),
       TextButton(
-        onPressed: () {},   // TODO: onPressed 구현 필요.
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DragToDrawRectangle()));
+        },   // TODO: onPressed 구현 필요.
         child: const Text('Working on it!!'),
       ),
     ];

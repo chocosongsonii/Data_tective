@@ -7,6 +7,8 @@ import 'dart:io';
 
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 
+import 'detect/detection_screen_copy.dart';
+
 ImagePicker picker = ImagePicker();
 
 
