@@ -773,196 +773,125 @@ class StickerOption extends StatelessWidget {
   }
 }
 
-Widget faceBottomSheet(BuildContext context) {
-  return Column(
-    children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,30,0,0),
-        child: Row(
-          children: [
-            Column(
-              children: const [
-                Text(
-                    '초상권 침해',style: TextStyle(fontFamily: 'SCDream4',
-                    color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
-                ), //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(20,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                Text(
-                    '타인의 얼굴을 고의 또는 실수로 찍어 유출하면',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),
-                Text(
-                    '   초상권 침해로 손해배상을 청구 당할 수 있습니다',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),
-                //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                OutlinedButton(
-                    onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
-
-                    child: Text("자세히 알아보기",
-                        style: TextStyle(
-                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                    )
-                ),//TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,30,0,0),
-        child: Row(
-          children: [
-            Column(
-              children: const [
-                Text(
-                    '개인 신상정보 노출',style: TextStyle(fontFamily: 'SCDream4',
-                    color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
-                ), //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(20,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                Text(
-                    '자신의 얼굴이 들어간 사진을 노출하게 되면   ',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),
-                Text(
-                    '   딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),
-                //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                OutlinedButton(
-                    onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
-
-                    child: Text("자세히 알아보기",
-                        style: TextStyle(
-                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                    )
-                ),//TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-              ],
-            ),
-          ],
-        ),
-      ),
-
-    ],
-  );
-}
-
 launchWebView(String url) async {
   if (await canLaunch(url)) {
     await launch(url, forceSafariVC: true, forceWebView: true);
   }
 }
 
+Widget faceBottomSheet(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+            '초상권 침해',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: 26)
+        ),
+        const SizedBox(height: 10),
+        const Text(
+            '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                height: 1.5)
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton(
+            onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
+
+            child: const Text(
+                "자세히 알아보기",
+                style: TextStyle(
+                    color:  Colors.black45,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    height: 1.5)
+            )
+        ),
+        const SizedBox(height: 30),
+        const Text(
+            '개인 신상정보 노출',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: 26)
+        ),
+        const SizedBox(height: 10),
+        const Text(
+            '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                height: 1.5)
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton(
+            onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
+
+            child: const Text(
+                "자세히 알아보기",
+                style: TextStyle(
+                    color:  Colors.black45,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    height: 1.5)
+            )
+        ),
+
+      ],
+    ),
+  );
+}
+
 
 Widget stickerBottomSheet(BuildContext context) {
-  return Column(
-    children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,30,0,0),
-        child: Row(
-          children: [
-            Column(
-                children: const [
-                  Text(
-                      '개인 고유 식별정보 노출',style: TextStyle(fontFamily: 'SCDream4',
-                      color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
-                  ),]
-            ),
-          ],
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+            '개인 고유 식별정보 노출',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: 26)
         ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(20,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                Text(
-                    '   자동차 번호판과 같은 개인정보는 내 다른 개인정보와 ',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),
-                Text(
-                    ' 결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
-
-                    style: TextStyle(fontFamily: 'SCDream4',
-                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                ),],
-            ),
-          ],
+        const SizedBox(height: 10),
+        const Text(
+            '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
+            style: TextStyle(
+                fontFamily: 'SCDream4',
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                height: 1.5)
         ),
-      ),
-      Padding(
-        padding: EdgeInsets.fromLTRB(30,10,10,0),
-        child: Row(
-          children: [
-            Column(
-              children:  [
-                OutlinedButton(
-                    onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
-
-                    child: Text("자세히 알아보기",
-                        style: TextStyle(
-                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
-                    )
-                ),
-              ],
-            ),
-          ],
+        const SizedBox(height: 10),
+        OutlinedButton(
+            onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
+            child: const Text(
+                "자세히 알아보기",
+                style: TextStyle(
+                    color:  Colors.black45,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    height: 1.5)
+            )
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }
