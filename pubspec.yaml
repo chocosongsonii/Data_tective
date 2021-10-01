@@ -98,6 +98,9 @@ flutter:
     - family: SCDream4
       fonts:
         - asset: fonts/SCDream4.ttf
+    - family: SCDream6
+      fonts:
+        - asset: fonts/SCDream6.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

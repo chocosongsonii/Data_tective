@@ -14,11 +14,10 @@ ImagePicker picker = ImagePicker();
 
 class ImageFromGalleryEx extends StatefulWidget {
   final ImageSource sourceType;
-  final int _stickerId;
-  const ImageFromGalleryEx(this.sourceType, this._stickerId, {Key key}) : super(key: key);
+  const ImageFromGalleryEx(this.sourceType, {Key key}) : super(key: key);
 
   @override
-  ImageFromGalleryExState createState() => ImageFromGalleryExState(sourceType, _stickerId);
+  ImageFromGalleryExState createState() => ImageFromGalleryExState(sourceType);
 }
 
 class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
@@ -27,9 +26,8 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
 
   File imageFile;
   ImageSource sourceType;
-  final int _stickerId;
 
-  ImageFromGalleryExState(this.sourceType, this._stickerId);
+  ImageFromGalleryExState(this.sourceType);
 
   @override
   void initState() {
