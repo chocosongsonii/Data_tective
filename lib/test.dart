@@ -62,7 +62,8 @@ class _DragToDrawRectangleState extends State<DragToDrawRectangle> {
             _scaleUpdateGesture(details),
         onInteractionEnd: (details) =>
             _scaleEndGesture(details),
-        child: Image.asset('assets/sticker1.png'),
+        child:
+        Image.asset('assets/sticker1.png'),
         // child: CustomPaint(
         //   willChange: true,
         //   isComplex: true,

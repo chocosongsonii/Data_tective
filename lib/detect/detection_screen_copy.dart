@@ -7,7 +7,9 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:touchable/touchable.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:url_launcher/url_launcher.dart' show canLaunch, launch;
 
 class DetectionScreen extends StatefulWidget {
   final File imageFile;
@@ -50,6 +52,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
   ui.Image stickerImage;
   dynamic _stickerImage;
+
+  double x = 0.0;
+  double y = 0.0;
 
   @override
   void initState() {
@@ -183,105 +188,123 @@ class _DetectionScreenState extends State<DetectionScreen> {
     });
   }
 
+  void _updateLocation(TapDownDetails details) {
+    setState(() {
+      x = details.globalPosition.dx;
+      y = details.globalPosition.dy;
+    });
+  }
+
   Column columnForBlur() {
     return Column(
       children: [
         Flexible(
           flex: 15,
-          child: InteractiveViewer(
-            onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
-            onInteractionUpdate: (details) =>
-                _scaleUpdateGesture(details),
-            onInteractionEnd: (details) =>
-                _scaleEndGesture(details),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Stack(
-                  children: [
-                    Flexible(child: Image.file(imageFile,)),
-                    for(Face face in faces)
-                      Positioned(
-                        top: face.boundingBox.top,
-                        left: face.boundingBox.left,
-                        child: Center(
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: imageImage.width*_sigma*0.001,
-                                sigmaY: imageImage.height*_sigma*0.001,
+          child: GestureDetector(
+            onTapDown: (TapDownDetails details) {_updateLocation(details);},
+            child: InteractiveViewer(
+              minScale: 0.1,
+              maxScale: 5,
+              onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
+              onInteractionUpdate: (details) =>
+                  _scaleUpdateGesture(details),
+              onInteractionEnd: (details) =>
+                  _scaleEndGesture(details),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Stack(
+                          children: [
+                            Flexible(child: Image.file(imageFile,)),
+                            for(Face face in faces)
+                              Positioned(
+                                top: face.boundingBox.top,
+                                left: face.boundingBox.left,
+                                child: Center(
+                                  child: ClipRect(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: imageImage.width*_sigma*0.001,
+                                        sigmaY: imageImage.height*_sigma*0.001,
+                                      ),
+                                      child: GestureDetector(
+                                        onTapDown: (_) {
+                                          showModalBottomSheet(context: context, builder: faceBottomSheet);
+                                        },
+                                        child: Container(
+                                          // alignment: Alignment.center,
+                                          width: face.boundingBox.width,
+                                          height: face.boundingBox.height,
+                                          color: Colors.black.withOpacity(0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              child: Container(
-                                // alignment: Alignment.center,
-                                width: face.boundingBox.width,
-                                height: face.boundingBox.height,
-                                color: Colors.black.withOpacity(0),
+                            for(TextLine textLine in textLines)
+                              Positioned(
+                                top: textLine.rect.top,
+                                left: textLine.rect.left,
+                                child: Center(
+                                  child: ClipRect(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: imageImage.width*_sigma*0.001,
+                                        sigmaY: imageImage.height*_sigma*0.001,
+                                      ),
+                                      child: GestureDetector(
+                                        onTapDown: (_) {
+                                          showModalBottomSheet(context: context, builder: stickerBottomSheet);
+                                        },
+                                        child: Container(
+                                          // alignment: Alignment.center,
+                                          width: textLine.rect.width,
+                                          height: textLine.rect.height,
+                                          color: Colors.black.withOpacity(0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
+                            for(Rect rect in added)
+                              Positioned(
+                                top: rect.top,
+                                left: rect.left,
+                                child: Center(
+                                  child: ClipRect(
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: imageImage.width*_sigma*0.001,
+                                        sigmaY: imageImage.height*_sigma*0.001,
+                                      ),
+                                      child: Container(
+                                        // alignment: Alignment.center,
+                                        width: rect.width,
+                                        height: rect.height,
+                                        color: Colors.black.withOpacity(0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            CustomPaint(
+                                painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
                             ),
-                          ),
-                        ),
+                          ]
                       ),
-                    for(TextLine textLine in textLines)
-                      Positioned(
-                        top: textLine.rect.top,
-                        left: textLine.rect.left,
-                        child: Center(
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: imageImage.width*_sigma*0.001,
-                                sigmaY: imageImage.height*_sigma*0.001,
-                              ),
-                              child: Container(
-                                // alignment: Alignment.center,
-                                width: textLine.rect.width,
-                                height: textLine.rect.height,
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    for(Rect rect in added)
-                      Positioned(
-                        top: rect.top,
-                        left: rect.left,
-                        child: Center(
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: imageImage.width*_sigma*0.001,
-                                sigmaY: imageImage.height*_sigma*0.001,
-                              ),
-                              child: Container(
-                                // alignment: Alignment.center,
-                                width: rect.width,
-                                height: rect.height,
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    // SizedBox(
-                    //   height: imageImage != null
-                    //       ?imageImage.height.toDouble()
-                    //       :300,
-                    //   width: imageImage != null
-                    //       ?imageImage.width.toDouble()
-                    //       :300,
-                    //   // child: Image.file(image),
-                    //   child: CanvasTouchDetector(
-                    //     builder: (context) => CustomPaint(
-                    //       painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
-                    //     ),
-                    //   ),
-                    // ),
-                  ]
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         Flexible(
           flex: 3,
           child: Center(
@@ -310,26 +333,70 @@ class _DetectionScreenState extends State<DetectionScreen> {
         Flexible(
           flex: 15,
           child: InteractiveViewer(
+            minScale: 0.1,
+            maxScale: 5,
             onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
             onInteractionUpdate: (details) =>
                 _scaleUpdateGesture(details),
             onInteractionEnd: (details) =>
                 _scaleEndGesture(details),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: SizedBox(
-                height: imageImage != null
-                    ?imageImage.height.toDouble()
-                    :300,
-                width: imageImage != null
-                    ?imageImage.width.toDouble()
-                    :300,
-                child: CanvasTouchDetector(
-                  builder: (context) => CustomPaint(
-                    painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Stack(
+                      children: [
+                        Flexible(child: Image.file(imageFile,)),
+                        for(Face face in faces)
+                          Positioned(
+                            top: face.boundingBox.top,
+                            left: face.boundingBox.left,
+                            child: Center(
+                              child: ClipRect(
+                                child: GestureDetector(
+                                  onTapDown: (_) {
+                                    showModalBottomSheet(context: context, builder: faceBottomSheet);
+                                  },
+                                  child: Container(
+                                    // alignment: Alignment.center,
+                                    width: face.boundingBox.width,
+                                    height: face.boundingBox.height,
+                                    color: Colors.black.withOpacity(0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        for(TextLine textLine in textLines)
+                          Positioned(
+                            top: textLine.rect.top,
+                            left: textLine.rect.left,
+                            child: Center(
+                              child: ClipRect(
+                                child: GestureDetector(
+                                  onTapDown: (_) {
+                                    showModalBottomSheet(context: context, builder: stickerBottomSheet);
+                                  },
+                                  child: Container(
+                                    // alignment: Alignment.center,
+                                    width: textLine.rect.width,
+                                    height: textLine.rect.height,
+                                    color: Colors.black.withOpacity(0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        CustomPaint(
+                            painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
+                        ),
+                      ]
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -339,25 +406,27 @@ class _DetectionScreenState extends State<DetectionScreen> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: GridView.count(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                crossAxisCount: 1,
-                mainAxisSpacing: 5,
-                children: [
-                  for (int i = 0; i < stickers.length; i++)
-                    StickerOption(
-                      stickers[i]['name'] as String,
-                      img: stickers[i]['img'] as String,
-                      onTap: () async {
-                        checkOption(i + 1);
-                        _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
-                        convertImageType();
-                        print(_stickerId);
-                      },
-                      selected: i + 1 == _stickerId,
-                    )
-                ],
+              child: Expanded(
+                child: GridView.count(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 5,
+                  children: [
+                    for (int i = 0; i < stickers.length; i++)
+                      StickerOption(
+                        stickers[i]['name'] as String,
+                        img: stickers[i]['img'] as String,
+                        onTap: () async {
+                          checkOption(i + 1);
+                          _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
+                          convertImageType();
+                          print(_stickerId);
+                        },
+                        selected: i + 1 == _stickerId,
+                      )
+                  ],
+                ),
               ),
             ),
           ),
@@ -475,19 +544,10 @@ class BlurDraw extends CustomPainter {
   @override
 
   void paint(Canvas canvas, Size size) {
-    TouchyCanvas touchyCanvas = TouchyCanvas(context, canvas);
 
     for (Face face in faces) {
 
-      var blueRect = Rect.fromLTWH(face.boundingBox.left, face.boundingBox.top, face.boundingBox.width, face.boundingBox.height);
-
-      touchyCanvas.drawRect(blueRect, Paint()
-        ..color = Colors.transparent
-          , onTapDown: (_) {
-            showModalBottomSheet(context: context, builder: faceBottomSheet);
-      });
-
-      touchyCanvas.drawCircle(
+      canvas.drawCircle(
         Offset(face.boundingBox.left, face.boundingBox.top),
         face.boundingBox.width/15,
         Paint()
@@ -515,13 +575,7 @@ class BlurDraw extends CustomPainter {
 
     for (TextLine textLine in textLines) {
 
-      touchyCanvas.drawRect(Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom), Paint()
-        ..color = Colors.transparent
-          , onTapDown: (_) {
-            showModalBottomSheet(context: context, builder: stickerBottomSheet);
-          });
-
-      touchyCanvas.drawCircle(
+      canvas.drawCircle(
         Offset(textLine.rect.left, textLine.rect.top),
         textLine.rect.width/15,
         Paint()
@@ -568,13 +622,6 @@ class StickerDraw extends CustomPainter {
   @override
 
   void paint(Canvas canvas, Size size) {
-    TouchyCanvas touchyCanvas = TouchyCanvas(context, canvas);
-
-    touchyCanvas.drawImage(
-        image,
-        Offset.zero,
-        Paint()
-    );
 
     for (Face face in faces) {
 
@@ -584,30 +631,12 @@ class StickerDraw extends CustomPainter {
           Offset(face.boundingBox.left, face.boundingBox.top) & Size(face.boundingBox.width, face.boundingBox.height),
           Paint());
 
-      var blueRect = Rect.fromLTWH(face.boundingBox.left, face.boundingBox.top, face.boundingBox.width, face.boundingBox.height);
-
-      touchyCanvas.drawRect(blueRect, Paint()
-        ..color = Colors.transparent
-          , onTapDown: (_) {
-            showModalBottomSheet(context: context, builder: faceBottomSheet);
-          });
-
-      touchyCanvas.drawRect(
-        Rect.fromLTWH(face.boundingBox.left, face.boundingBox.top, face.boundingBox.width, face.boundingBox.height),
-        // face.boundingBox,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..color = Colors.greenAccent
-        // ..imageFilter = ImageFilter.blur(sigmaX: 10, sigmaY: 10)
-          ..strokeWidth = 4,
-      );
-
-      touchyCanvas.drawLine(
-        Offset(face.boundingBox.left, face.boundingBox.top - face.boundingBox.height/12),
-        Offset(face.boundingBox.left + face.boundingBox.height/20, face.boundingBox.top - face.boundingBox.height/12),
+      canvas.drawCircle(
+        Offset(face.boundingBox.left, face.boundingBox.top),
+        face.boundingBox.width/15,
         Paint()
           ..color = Colors.red.withOpacity(0.8)
-          ..strokeWidth = face.boundingBox.height/8
+          ..strokeWidth = face.boundingBox.width/10
           ..style = PaintingStyle.fill,);
 
 
@@ -615,7 +644,7 @@ class StickerDraw extends CustomPainter {
         text: TextSpan(
           style: TextStyle(
             color: Colors.white,
-            fontSize: face.boundingBox.width/7.2,
+            fontSize: face.boundingBox.width.toDouble()/9,
             fontWeight: FontWeight.w400,
           ),
           text: "!",
@@ -625,7 +654,7 @@ class StickerDraw extends CustomPainter {
       );
 
       paintSpanId.layout();
-      paintSpanId.paint(canvas, Offset(face.boundingBox.left, face.boundingBox.top - face.boundingBox.height/6));
+      paintSpanId.paint(canvas, Offset(face.boundingBox.left - face.boundingBox.width/60, face.boundingBox.top - face.boundingBox.width/16));
 
     }
 
@@ -637,13 +666,7 @@ class StickerDraw extends CustomPainter {
           Offset(textLine.rect.left, textLine.rect.top) & Size(textLine.rect.width, textLine.rect.height),
           Paint());
 
-      touchyCanvas.drawRect(Rect.fromLTRB(textLine.rect.left, textLine.rect.top, textLine.rect.right, textLine.rect.bottom), Paint()
-        ..color = Colors.transparent
-          , onTapDown: (_) {
-            showModalBottomSheet(context: context, builder: stickerBottomSheet);
-          });
-
-      touchyCanvas.drawCircle(
+      canvas.drawCircle(
         Offset(textLine.rect.left, textLine.rect.top),
         textLine.rect.width/15,
         Paint()
@@ -702,43 +725,47 @@ class StickerOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink.image(
-      fit: BoxFit.contain,
-      image: AssetImage(img),
-      child: InkWell(
-        onTap: onTap,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                      color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
-                      width: selected ?? false ? 10 : 0,
-                    )
-                )
-            ),
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  title ?? '',
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontFamily: 'Staatliches-Regular'
+    return Expanded(
+      child: Ink.image(
+        fit: BoxFit.contain,
+        image: AssetImage(img),
+        child: InkWell(
+          onTap: onTap,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
+                        width: selected ?? false ? 10 : 0,
+                      )
+                  )
+              ),
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Flexible(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      title ?? '',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Staatliches-Regular'
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ],),
+                )
+              ],),
+            ),
           ),
         ),
       ),
@@ -747,23 +774,195 @@ class StickerOption extends StatelessWidget {
 }
 
 Widget faceBottomSheet(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.all(24),
-    child: Column(
-      children: [
-        Text('초상권 침해') //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-      ],
-    ),
+  return Column(
+    children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,30,0,0),
+        child: Row(
+          children: [
+            Column(
+              children: const [
+                Text(
+                    '초상권 침해',style: TextStyle(fontFamily: 'SCDream4',
+                    color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
+                ), //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(20,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                Text(
+                    '타인의 얼굴을 고의 또는 실수로 찍어 유출하면',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),
+                Text(
+                    '   초상권 침해로 손해배상을 청구 당할 수 있습니다',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),
+                //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                OutlinedButton(
+                    onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
+
+                    child: Text("자세히 알아보기",
+                        style: TextStyle(
+                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                    )
+                ),//TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,30,0,0),
+        child: Row(
+          children: [
+            Column(
+              children: const [
+                Text(
+                    '개인 신상정보 노출',style: TextStyle(fontFamily: 'SCDream4',
+                    color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
+                ), //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(20,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                Text(
+                    '자신의 얼굴이 들어간 사진을 노출하게 되면   ',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),
+                Text(
+                    '   딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),
+                //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                OutlinedButton(
+                    onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
+
+                    child: Text("자세히 알아보기",
+                        style: TextStyle(
+                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                    )
+                ),//TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
+              ],
+            ),
+          ],
+        ),
+      ),
+
+    ],
   );
 }
 
+launchWebView(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url, forceSafariVC: true, forceWebView: true);
+  }
+}
+
+
 Widget stickerBottomSheet(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.all(24),
-    child: Column(
-      children: [
-        Text('개인 고유 식별번호 노출') //TODO: BS 꾸미기, 검열 해제 버튼 넣기(TextButton) (예영)
-      ],
-    ),
+  return Column(
+    children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,30,0,0),
+        child: Row(
+          children: [
+            Column(
+                children: const [
+                  Text(
+                      '개인 고유 식별정보 노출',style: TextStyle(fontFamily: 'SCDream4',
+                      color: Colors.black, fontWeight: FontWeight.w700, fontSize: 26)
+                  ),]
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(20,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                Text(
+                    '   자동차 번호판과 같은 개인정보는 내 다른 개인정보와 ',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),
+                Text(
+                    ' 결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
+
+                    style: TextStyle(fontFamily: 'SCDream4',
+                        color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                ),],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(30,10,10,0),
+        child: Row(
+          children: [
+            Column(
+              children:  [
+                OutlinedButton(
+                    onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
+
+                    child: Text("자세히 알아보기",
+                        style: TextStyle(
+                            color:  Colors.black45, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5)
+                    )
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ],
   );
 }
