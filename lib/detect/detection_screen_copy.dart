@@ -20,8 +20,6 @@ class DetectionScreen extends StatefulWidget {
 }
 
 class _DetectionScreenState extends State<DetectionScreen> {
-  // ui.Image imageSelected;
-  // List<Face> faces;
 
   File imageFile;
   _DetectionScreenState(this.imageFile);
@@ -30,7 +28,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
   List<Face> faces = [];
   List<TextBlock> textBlocks = [];
   List<TextLine> textLines = [];
-  List toRemoveTextBlock = [];
+  List <TextLine> toRemoveTextLine = [];
   List<Rect> added = [];
 
   Offset _start;
@@ -109,14 +107,14 @@ class _DetectionScreenState extends State<DetectionScreen> {
           textLines.add(line);
         }
       }
-      textBlocks.forEach((element) {
+      textLines.forEach((element) {
         textStr = element.text;
         num = textStr.replaceAll(RegExp(r'[^0-9]'), '');
         if (num.length < 6) {
-          toRemoveTextBlock.add(element);
+          toRemoveTextLine.add(element);
         }
       });
-      textBlocks.removeWhere((element) => toRemoveTextBlock.contains(element));
+      textLines.removeWhere((element) => toRemoveTextLine.contains(element));
     });
   }
 
