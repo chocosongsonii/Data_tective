@@ -120,11 +120,11 @@ class _DetectionScreenState extends State<DetectionScreen> {
       }
       textLines.removeWhere((element) => toRemoveTextLine.contains(element));
 
-      if (imageImage.width/imageImage.height < MediaQuery.of(context).size.width/MediaQuery.of(context).size.height) {
-        imageScale = (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/imageImage.height;
-      }
-      else if (imageImage.width/imageImage.height >= MediaQuery.of(context).size.width/MediaQuery.of(context).size.height) {
+      if (imageImage.height/imageImage.width <= (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/(MediaQuery.of(context).size.width)) {
         imageScale = MediaQuery.of(context).size.width/imageImage.width;
+      }
+      else if (imageImage.height/imageImage.width > (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/(MediaQuery.of(context).size.width)) {
+        imageScale = (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/imageImage.height;
       }
     });
   }
@@ -440,7 +440,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
                           checkOption(i + 1);
                           _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
                           convertImageType();
-                          print(_stickerId);
                         },
                         selected: i + 1 == _stickerId,
                       )
@@ -467,23 +466,34 @@ class _DetectionScreenState extends State<DetectionScreen> {
           style: TextStyle(
               fontFamily: 'SCDream4'
           ),),
-        // actions: [
-        //   TextButton(
-        //       onPressed: () {
-        //         for(TextBlock block in textBlocks) {
-        //           print('textBlock: ${block.text}');
-        //           for (TextLine line in block.lines) {
-        //             print('line: ${line.text}');
-        //           }
-        //         }
-        //       },
-        //       child: const Text('읽기', style: TextStyle(color: Colors.white),)),
-        //   // Visibility(
-        //   //   visible: stickerVisibility,
-        //   //   child: TextButton(onPressed: convertImageType,
-        //   //       child: const Text('검열', style: TextStyle(color: Colors.white),)),
-        //   // )
-        // ],
+        actions: [
+          IconButton(
+              onPressed: () {
+                // added.removeLast();
+                print(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*15/21);
+                print(imageImage.width/imageImage.height);
+                print((MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21);
+                print(MediaQuery.of(context).size.height);
+                print(imageImage.height);
+                print(imageImage.width);
+              },
+              icon: const Icon(Icons.reply))
+          // TextButton(
+          //     onPressed: () {
+          //       for(TextBlock block in textBlocks) {
+          //         print('textBlock: ${block.text}');
+          //         for (TextLine line in block.lines) {
+          //           print('line: ${line.text}');
+          //         }
+          //       }
+          //     },
+          //     child: const Text('읽기', style: TextStyle(color: Colors.white),)),
+          // Visibility(
+          //   visible: stickerVisibility,
+          //   child: TextButton(onPressed: convertImageType,
+          //       child: const Text('검열', style: TextStyle(color: Colors.white),)),
+          // )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
