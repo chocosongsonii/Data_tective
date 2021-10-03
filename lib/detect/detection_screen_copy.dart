@@ -46,13 +46,17 @@ class _DetectionScreenState extends State<DetectionScreen> {
   String num;
   String textStr;
 
-  bool apply = false;
-
   ui.Image stickerImage;
   dynamic _stickerImage;
 
-  double x = 0.0;
-  double y = 0.0;
+  double xStart = 0.0;
+  double xEnd = 0.0;
+  double yStart = 0.0;
+  double yEnd = 0.0;
+
+  double appBarHeight = AppBar().preferredSize.height;
+
+  double imageScale = 0.0;
 
   @override
   void initState() {
@@ -107,14 +111,21 @@ class _DetectionScreenState extends State<DetectionScreen> {
           textLines.add(line);
         }
       }
-      textLines.forEach((element) {
+      for (var element in textLines) {
         textStr = element.text;
         num = textStr.replaceAll(RegExp(r'[^0-9]'), '');
         if (num.length < 6) {
           toRemoveTextLine.add(element);
         }
-      });
+      }
       textLines.removeWhere((element) => toRemoveTextLine.contains(element));
+
+      if (imageImage.width/imageImage.height < MediaQuery.of(context).size.width/MediaQuery.of(context).size.height) {
+        imageScale = (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/imageImage.height;
+      }
+      else if (imageImage.width/imageImage.height >= MediaQuery.of(context).size.width/MediaQuery.of(context).size.height) {
+        imageScale = MediaQuery.of(context).size.width/imageImage.width;
+      }
     });
   }
 
@@ -163,9 +174,11 @@ class _DetectionScreenState extends State<DetectionScreen> {
     });
   }
 
-  _scaleStartGesture(ScaleStartDetails onStart) {
+  void _scaleStartGesture(ScaleStartDetails onStart) {
     setState(() {
       _start = onStart.focalPoint;
+      xStart = _start.dx;
+      yStart = _start.dy;
     });
   }
 
@@ -174,6 +187,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
           () {
         _start ??= onUpdate.focalPoint;
         _end = onUpdate.focalPoint;
+        xEnd = _end.dx;
+        yEnd = _end.dy;
       },
     );
   }
@@ -182,14 +197,23 @@ class _DetectionScreenState extends State<DetectionScreen> {
     setState(() {
       // _start = null;
       // _end = null;
-      added.add(Rect.fromPoints(_start,_end));
-    });
-  }
-
-  void _updateLocation(TapDownDetails details) {
-    setState(() {
-      x = details.globalPosition.dx;
-      y = details.globalPosition.dy;
+      // added.add(Rect.fromPoints(_start,_end));
+      added.add(Rect.fromLTRB(
+          (xStart-(MediaQuery.of(context).size.width-imageImage.width*imageScale)/2)/imageScale,
+          (yStart-(MediaQuery.of(context).padding.top+appBarHeight+30+(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*3/21))/imageScale,
+          (xEnd-(MediaQuery.of(context).size.width-imageImage.width*imageScale)/2)/imageScale,
+          (yEnd-(MediaQuery.of(context).padding.top+appBarHeight+30+(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*3/21))/imageScale,
+          // yEnd-appBarHeight-MediaQuery.of(context).padding.top-(MediaQuery.of(context).size.height-appBarHeight-MediaQuery.of(context).padding.top-80)*3/21/MediaQuery.of(context).size.height*imageImage.height
+      ));
+      for (Rect rect in added) {
+        if (rect.height<=0) {
+          added.remove(rect);
+        }
+        else if (rect.width<=0) {
+          added.remove(rect);
+        }
+      }
+      // added.add(Rect.fromLTWH(0, 0, imageImage.width.toDouble(), imageImage.height.toDouble()));
     });
   }
 
@@ -198,111 +222,108 @@ class _DetectionScreenState extends State<DetectionScreen> {
       children: [
         Flexible(
           flex: 15,
-          child: GestureDetector(
-            onTapDown: (TapDownDetails details) {_updateLocation(details);},
-            child: InteractiveViewer(
-              minScale: 0.1,
-              maxScale: 5,
-              onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
-              onInteractionUpdate: (details) =>
-                  _scaleUpdateGesture(details),
-              onInteractionEnd: (details) =>
-                  _scaleEndGesture(details),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Stack(
-                          children: [
-                            Flexible(child: Image.file(imageFile,)),
-                            for(Face face in faces)
-                              Positioned(
-                                top: face.boundingBox.top,
-                                left: face.boundingBox.left,
-                                child: Center(
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: imageImage.width*_sigma*0.001,
-                                        sigmaY: imageImage.height*_sigma*0.001,
-                                      ),
-                                      child: GestureDetector(
-                                        onTapDown: (_) {
-                                          showModalBottomSheet(context: context, builder: faceBottomSheet);
-                                        },
-                                        child: Container(
-                                          // alignment: Alignment.center,
-                                          width: face.boundingBox.width,
-                                          height: face.boundingBox.height,
-                                          color: Colors.black.withOpacity(0),
-                                        ),
-                                      ),
+          child: InteractiveViewer(
+            // minScale: 0.1,
+            // maxScale: 5,
+            onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
+            onInteractionUpdate: (details) =>
+                _scaleUpdateGesture(details),
+            onInteractionEnd: (details) =>
+                _scaleEndGesture(details),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Stack(
+                        children: [
+                          Flexible(child: Image.file(imageFile,)),
+                          for(Face face in faces)
+                            Positioned(
+                              top: face.boundingBox.top,
+                              left: face.boundingBox.left,
+                              child: Center(
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                      sigmaX: imageImage.width*_sigma*0.001,
+                                      sigmaY: imageImage.height*_sigma*0.001,
                                     ),
-                                  ),
-                                ),
-                              ),
-                            for(TextLine textLine in textLines)
-                              Positioned(
-                                top: textLine.rect.top,
-                                left: textLine.rect.left,
-                                child: Center(
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: imageImage.width*_sigma*0.001,
-                                        sigmaY: imageImage.height*_sigma*0.001,
-                                      ),
-                                      child: GestureDetector(
-                                        onTapDown: (_) {
-                                          showModalBottomSheet(context: context, builder: stickerBottomSheet);
-                                        },
-                                        child: Container(
-                                          // alignment: Alignment.center,
-                                          width: textLine.rect.width,
-                                          height: textLine.rect.height,
-                                          color: Colors.black.withOpacity(0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            for(Rect rect in added)
-                              Positioned(
-                                top: rect.top,
-                                left: rect.left,
-                                child: Center(
-                                  child: ClipRect(
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                        sigmaX: imageImage.width*_sigma*0.001,
-                                        sigmaY: imageImage.height*_sigma*0.001,
-                                      ),
+                                    child: GestureDetector(
+                                      onTapDown: (_) {
+                                        showModalBottomSheet(context: context, builder: faceBottomSheet);
+                                      },
                                       child: Container(
                                         // alignment: Alignment.center,
-                                        width: rect.width,
-                                        height: rect.height,
+                                        width: face.boundingBox.width,
+                                        height: face.boundingBox.height,
                                         color: Colors.black.withOpacity(0),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            CustomPaint(
-                                painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
                             ),
-                          ]
-                      ),
+                          for(TextLine textLine in textLines)
+                            Positioned(
+                              top: textLine.rect.top,
+                              left: textLine.rect.left,
+                              child: Center(
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                      sigmaX: imageImage.width*_sigma*0.001,
+                                      sigmaY: imageImage.height*_sigma*0.001,
+                                    ),
+                                    child: GestureDetector(
+                                      onTapDown: (_) {
+                                        showModalBottomSheet(context: context, builder: stickerBottomSheet);
+                                      },
+                                      child: Container(
+                                        // alignment: Alignment.center,
+                                        width: textLine.rect.width,
+                                        height: textLine.rect.height,
+                                        color: Colors.black.withOpacity(0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          for(Rect rect in added)
+                            Positioned(
+                              top: rect.top,
+                              left: rect.left,
+                              child: Center(
+                                child: ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(
+                                      sigmaX: imageImage.width*_sigma*0.001,
+                                      sigmaY: imageImage.height*_sigma*0.001,
+                                    ),
+                                    child: Container(
+                                      // alignment: Alignment.center,
+                                      width: rect.width,
+                                      height: rect.height,
+                                      color: Colors.black.withOpacity(0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          CustomPaint(
+                              painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
+                          ),
+                        ]
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
-        const SizedBox(height: 30),
+        // const SizedBox(height: 30),
         Flexible(
           flex: 3,
           child: Center(
@@ -398,7 +419,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 30),
+        // SizedBox(height: 30),
         Flexible(
           flex: 3,
           child: Center(
@@ -441,46 +462,32 @@ class _DetectionScreenState extends State<DetectionScreen> {
         gradient: const LinearGradient(
             colors: [Color(0xff647dee), Color(0xff7f53ac)]
         ),
-        title:Text('x: '+ _start.toString() + ' y: ' + _end.toString()),
-        // const Text(
-        //   '사진 검열',
-        //   style: TextStyle(
-        //       fontFamily: 'Staatliches-Regular'
-        //   ),),
-        actions: [
-          TextButton(
-              onPressed: () {
-                for(TextBlock block in textBlocks) {
-                  print('textBlock: ${block.text}');
-                  for (TextLine line in block.lines) {
-                    print('line: ${line.text}');
-                  }
-                }
-              },
-              child: const Text('읽기', style: TextStyle(color: Colors.white),)),
-          TextButton(
-              onPressed: () {
-                print(added.length);
-                print('image: '+imageImage.width.toString());
-                for (Rect rect in added)
-                  print('rect: '+rect.width.toString());
-                for (Face face in faces)
-                  print('face: '+face.boundingBox.width.toString());
-                for (TextLine textline in textLines)
-                  print('text: '+textline.rect.width.toString());
-              },
-              child: const Text('Offsets', style: TextStyle(color: Colors.white),)),
-          Visibility(
-            visible: stickerVisibility,
-            child: TextButton(onPressed: convertImageType,
-                child: const Text('검열', style: TextStyle(color: Colors.white),)),
-          )
-        ],
+        title: const Text(
+          '사진 검열',
+          style: TextStyle(
+              fontFamily: 'SCDream4'
+          ),),
+        // actions: [
+        //   TextButton(
+        //       onPressed: () {
+        //         for(TextBlock block in textBlocks) {
+        //           print('textBlock: ${block.text}');
+        //           for (TextLine line in block.lines) {
+        //             print('line: ${line.text}');
+        //           }
+        //         }
+        //       },
+        //       child: const Text('읽기', style: TextStyle(color: Colors.white),)),
+        //   // Visibility(
+        //   //   visible: stickerVisibility,
+        //   //   child: TextButton(onPressed: convertImageType,
+        //   //       child: const Text('검열', style: TextStyle(color: Colors.white),)),
+        //   // )
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 30, 0, 50),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
               flex: 3,
@@ -511,7 +518,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
                       _stickerShow();
                     }
                     selectedIndex = index;
-                    print(selectedIndex);
                   },
                 ),
               ),
@@ -723,47 +729,45 @@ class StickerOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Ink.image(
-        fit: BoxFit.contain,
-        image: AssetImage(img),
-        child: InkWell(
-          onTap: onTap,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                        color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
-                        width: selected ?? false ? 10 : 0,
-                      )
-                  )
-              ),
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: [
-                Flexible(
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      title ?? '',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontFamily: 'Staatliches-Regular'
-                      ),
+    return Ink.image(
+      fit: BoxFit.contain,
+      image: AssetImage(img),
+      child: InkWell(
+        onTap: onTap,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                      color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
+                      width: selected ?? false ? 10 : 0,
+                    )
+                )
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: [
+              Flexible(
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    title ?? '',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontFamily: 'Staatliches-Regular'
                     ),
                   ),
-                )
-              ],),
-            ),
+                ),
+              )
+            ],),
           ),
         ),
       ),
