@@ -16,7 +16,7 @@ class DetectionScreen extends StatefulWidget {
   const DetectionScreen(this.imageFile);
 
   @override
-  _DetectionScreenState createState() => _DetectionScreenState(imageFile,);
+  _DetectionScreenState createState() => _DetectionScreenState(imageFile);
 }
 
 class _DetectionScreenState extends State<DetectionScreen> {
@@ -29,10 +29,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
   List<TextBlock> textBlocks = [];
   List<TextLine> textLines = [];
   List <TextLine> toRemoveTextLine = [];
+  List<Face> toRemoveFace = [];
   List<Rect> added = [];
-
-  Offset _start;
-  Offset _end;
 
   double _sigma = 5;
 
@@ -49,6 +47,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
   ui.Image stickerImage;
   dynamic _stickerImage;
 
+  Offset _start;
+  Offset _end;
+
   double xStart = 0.0;
   double xEnd = 0.0;
   double yStart = 0.0;
@@ -57,6 +58,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
   double appBarHeight = AppBar().preferredSize.height;
 
   double imageScale = 0.0;
+
+  double widthSum = 0;
+  double widthAverage = 0;
 
   @override
   void initState() {
@@ -126,8 +130,37 @@ class _DetectionScreenState extends State<DetectionScreen> {
       else if (imageImage.height/imageImage.width > (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/(MediaQuery.of(context).size.width)) {
         imageScale = (MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21/imageImage.height;
       }
+
+      if (faces.length <= 1) {
+        faces.clear();
+      }
+
+      for (Face face in faces) {
+        widthSum += face.boundingBox.width;
+        widthAverage = widthSum/faces.length;
+        // if (face.boundingBox.width > widthAverage*1.2) {
+        //   toRemoveFace.add(face);
+        // }
+      }
+      for (Face face in faces) {
+        if (face.boundingBox.width > widthAverage*1.2) {
+          toRemoveFace.add(face);
+        }
+      }
+      faces.removeWhere((face) => toRemoveFace.contains(face));
+
+      // for (Face face in faces) {
+      //   removeFace(face);
+      // }
+
     });
   }
+
+  // void removeFace(Face face) {
+  //   if (face.boundingBox.width >= widthAverage*0.8) {
+  //     faces.remove(face);
+  //   }
+  // }
 
   static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[ //TODO: 스티커 추가하기 (예영)
     <String, dynamic>{
@@ -369,8 +402,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                 child: ClipRect(
                                   child: BackdropFilter(
                                     filter: ImageFilter.blur(
-                                      sigmaX: imageImage.width*_sigma*0.001,
-                                      sigmaY: imageImage.height*_sigma*0.001,
+                                      sigmaX: imageImage.width*_sigma*0.1,
+                                      sigmaY: imageImage.height*_sigma*0.1,
                                     ),
                                     child: GestureDetector(
                                       onTapDown: (_) {
@@ -954,12 +987,13 @@ class _DetectionScreenState extends State<DetectionScreen> {
           IconButton(
               onPressed: () {
                 // added.removeLast();
-                print(MediaQuery.of(context).size.width/(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*15/21);
-                print(imageImage.width/imageImage.height);
-                print((MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-80)*15/21);
-                print(MediaQuery.of(context).size.height);
-                print(imageImage.height);
-                print(imageImage.width);
+                print(widthSum);
+                print(faces.length);
+                print(widthAverage);
+                print(toRemoveFace.length);
+                for (Face face in faces) {
+                  print(face.boundingBox.width);
+                }
               },
               icon: const Icon(Icons.reply))
           // TextButton(
