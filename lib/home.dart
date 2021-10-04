@@ -97,6 +97,7 @@ class _HomeState extends State<Home> {
               const Icon(
                 Icons.image,
                 size: 50,
+                color: Color(0xff5565db),
               ),
               const SizedBox(height: 20.0),
               const Center(
@@ -104,7 +105,7 @@ class _HomeState extends State<Home> {
                     '검열할 이미지를 선택해주세요',
                   style: TextStyle(
                       fontSize: 20.0,
-                      fontFamily: 'SCDream4'
+                      fontFamily: 'SCDream6'
                   ),),
               ),
               const SizedBox(height: 20),
@@ -116,7 +117,8 @@ class _HomeState extends State<Home> {
                     '갤러리 열기',
                     style: TextStyle(
                       fontSize: 18.0,
-                      fontFamily: 'SCDream4'
+                      fontFamily: 'SCDream4',
+                      color: Color(0xff647dee)
                     )
                   )
               ),
@@ -129,7 +131,8 @@ class _HomeState extends State<Home> {
                       '카메라 열기',
                       style: TextStyle(
                           fontSize: 18.0,
-                          fontFamily: 'SCDream4'
+                          fontFamily: 'SCDream4',
+                          color: Color(0xff647dee)
                       )
                   )
               ),
@@ -242,9 +245,9 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: ConvexAppBar(
         top: -25,
-        backgroundColor: const Color(0xff7f53ac),
+        backgroundColor: const Color(0xff647dee),
         gradient: const LinearGradient(
-            colors: [Color(0xff7f53ac), Color(0xff647dee), Color(0xff7f53ac),]
+            colors: [Color(0xff7f53ac), Color(0xff647dee), Color(0xff7f53ac)]
         ),
         // activeColor: const Color(0xffff9d00),
         style: TabStyle.fixed,
