@@ -39,6 +39,8 @@ dependencies:
   toggle_switch: ^1.2.0
   screenshot: ^1.2.3
   url_launcher: ^6.0.12
+  image_gallery_saver: ^1.7.0
+  fluttertoast: ^8.0.8
 
 
   # The following adds the Cupertino Icons font to your application.

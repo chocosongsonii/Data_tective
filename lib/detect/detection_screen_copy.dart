@@ -228,15 +228,11 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
   void _scaleEndGesture(ScaleEndDetails onEnd) {
     setState(() {
-      // _start = null;
-      // _end = null;
-      // added.add(Rect.fromPoints(_start,_end));
       added.add(Rect.fromLTRB(
           (xStart-(MediaQuery.of(context).size.width-imageImage.width*imageScale)/2)/imageScale,
           (yStart-(MediaQuery.of(context).padding.top+appBarHeight+30+(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*3/21))/imageScale,
           (xEnd-(MediaQuery.of(context).size.width-imageImage.width*imageScale)/2)/imageScale,
           (yEnd-(MediaQuery.of(context).padding.top+appBarHeight+30+(MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top-appBarHeight-MediaQuery.of(context).padding.bottom-80)*3/21))/imageScale,
-          // yEnd-appBarHeight-MediaQuery.of(context).padding.top-(MediaQuery.of(context).size.height-appBarHeight-MediaQuery.of(context).padding.top-80)*3/21/MediaQuery.of(context).size.height*imageImage.height
       ));
       for (Rect rect in added) {
         if (rect.height<=0) {
@@ -246,8 +242,13 @@ class _DetectionScreenState extends State<DetectionScreen> {
           added.remove(rect);
         }
       }
-      // added.add(Rect.fromLTWH(0, 0, imageImage.width.toDouble(), imageImage.height.toDouble()));
     });
+  }
+
+  launchWebView(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: true, forceWebView: true);
+    }
   }
 
   Column columnForBlur() {
@@ -280,8 +281,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                 child: ClipRect(
                                   child: BackdropFilter(
                                     filter: ImageFilter.blur(
-                                      sigmaX: imageImage.width*_sigma*0.001,
-                                      sigmaY: imageImage.height*_sigma*0.001,
+                                      sigmaX: imageImage.width*_sigma*0.002,
+                                      sigmaY: imageImage.height*_sigma*0.002,
                                     ),
                                     child: GestureDetector(
                                       onTapDown: (_) {
@@ -402,8 +403,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                 child: ClipRect(
                                   child: BackdropFilter(
                                     filter: ImageFilter.blur(
-                                      sigmaX: imageImage.width*_sigma*0.1,
-                                      sigmaY: imageImage.height*_sigma*0.1,
+                                      sigmaX: imageImage.width*_sigma*0.002,
+                                      sigmaY: imageImage.height*_sigma*0.002,
                                     ),
                                     child: GestureDetector(
                                       onTapDown: (_) {
@@ -490,8 +491,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                 child: ClipRect(
                                   child: BackdropFilter(
                                     filter: ImageFilter.blur(
-                                      sigmaX: imageImage.width*_sigma*0.001,
-                                      sigmaY: imageImage.height*_sigma*0.001,
+                                      sigmaX: imageImage.width*_sigma*0.002,
+                                      sigmaY: imageImage.height*_sigma*0.002,
                                     ),
                                     child: Container(
                                       // alignment: Alignment.center,
@@ -802,173 +803,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
     );
   }
 
-  launchWebView(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: true, forceWebView: true);
-    }
-  }
-
-  // Widget faceBottomSheet(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         const Text(
-  //             '초상권 침해',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.w700,
-  //                 fontSize: 26)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         const Text(
-  //             '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //                 height: 1.5)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         OutlinedButton(
-  //             onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
-  //
-  //             child: const Text(
-  //                 "자세히 알아보기",
-  //                 style: TextStyle(
-  //                     color:  Colors.black45,
-  //                     fontSize: 12,
-  //                     fontWeight: FontWeight.w500,
-  //                     height: 1.5)
-  //             )
-  //         ),
-  //         const SizedBox(height: 30),
-  //         const Text(
-  //             '개인 신상정보 노출',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.w700,
-  //                 fontSize: 26)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         const Text(
-  //             '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //                 height: 1.5)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         OutlinedButton(
-  //             onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
-  //
-  //             child: const Text(
-  //                 "자세히 알아보기",
-  //                 style: TextStyle(
-  //                     color:  Colors.black45,
-  //                     fontSize: 12,
-  //                     fontWeight: FontWeight.w500,
-  //                     height: 1.5)
-  //             )
-  //         ),
-  //         const SizedBox(height: 10),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             OutlinedButton(
-  //                 style: OutlinedButton.styleFrom(
-  //                     backgroundColor: Colors.red,
-  //                     side: const BorderSide(color: Colors.red, width: 1)
-  //                 ),
-  //                 onPressed: () {
-  //                   faces.remove(face);
-  //                 },
-  //                 child: const Text(
-  //                   '검열 해제',
-  //                   style: TextStyle(
-  //                     fontSize: 12,
-  //                     fontFamily: 'SCDream',
-  //                     color: Colors.white,
-  //                     fontWeight: FontWeight.w500,
-  //                   ),
-  //                 )),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
-
-  // Widget stickerBottomSheet(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         const Text(
-  //             '개인 고유 식별정보 노출',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.w700,
-  //                 fontSize: 26)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         const Text(
-  //             '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
-  //             style: TextStyle(
-  //                 fontFamily: 'SCDream4',
-  //                 color: Colors.black,
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w500,
-  //                 height: 1.5)
-  //         ),
-  //         const SizedBox(height: 10),
-  //         OutlinedButton(
-  //             onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
-  //             child: const Text(
-  //                 "자세히 알아보기",
-  //                 style: TextStyle(
-  //                     color:  Colors.black45,
-  //                     fontSize: 12,
-  //                     fontWeight: FontWeight.w500,
-  //                     height: 1.5)
-  //             )
-  //         ),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.end,
-  //           children: [
-  //             OutlinedButton(
-  //                 style: OutlinedButton.styleFrom(
-  //                     backgroundColor: Colors.red,
-  //                     side: const BorderSide(color: Colors.red, width: 1)
-  //                 ),
-  //                 onPressed: () {
-  //                   faces.remove(face);
-  //                 },
-  //                 child: const Text(
-  //                   '검열 해제',
-  //                   style: TextStyle(
-  //                     fontSize: 12,
-  //                     fontFamily: 'SCDream',
-  //                     color: Colors.white,
-  //                     fontWeight: FontWeight.w500,
-  //                   ),
-  //                 )),
-  //           ],
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
 
@@ -986,14 +820,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                // added.removeLast();
-                print(widthSum);
-                print(faces.length);
-                print(widthAverage);
-                print(toRemoveFace.length);
-                for (Face face in faces) {
-                  print(face.boundingBox.width);
-                }
+                added.removeLast();
               },
               icon: const Icon(Icons.reply))
           // TextButton(

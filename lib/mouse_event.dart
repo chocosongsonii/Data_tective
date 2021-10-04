@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Mouse extends StatefulWidget {
   @override
@@ -8,145 +14,111 @@ class Mouse extends StatefulWidget {
 }
 
 class _MouseState extends State<Mouse> {
-
-  double x = 0.0;
-  double y = 0.0;
-
-  double xStart = 0.0;
-  double xEnd = 0.0;
-  double yStart = 0.0;
-  double yEnd = 0.0;
-
-  Offset _start;
-  Offset _end;
-
-  List<Rect> added = [];
-
-  double appBarHeight = AppBar().preferredSize.height;
-
-  // void _updateLocation(TapDownDetails details) {
-  //   setState(() {
-  //     x = details.globalPosition.dx;
-  //     y = details.globalPosition.dy;
-  //   });
-  // }
-
-  // void _scaleStartGesture(DragStartDetails onStart) {
-  //   print('에베ㅐㄻ져도리ㅑㅁ주ㅚ뮤ㅣㅑㅓㅠㅍ류' + added.length.toString());
-  //   setState(() {
-  //     xStart = onStart.globalPosition.dx;
-  //     yStart = onStart.globalPosition.dy;
-  //   });
-  // }
-  //
-  // void _scaleUpdateGesture(DragUpdateDetails onUpdate) {
-  //   setState(
-  //         () {
-  //       xEnd = onUpdate.globalPosition.dx;
-  //       yEnd = onUpdate.globalPosition.dy;
-  //     },
-  //   );
-  // }
-  //
-  // void _scaleEndGesture(DragEndDetails onEnd) {
-  //   setState(() {
-  //     added.add(Rect.fromLTRB(xStart, yStart, xEnd, yEnd));
-  //     xStart = null;
-  //     xEnd = null;
-  //     yStart = null;
-  //     yEnd = null;
-  //     print('에베ㅐㄻ져도리ㅑㅁ주ㅚ뮤ㅣㅑㅓㅠㅍ류' + added.length.toString());
-  //   });
-  // }
-
-  void _scaleStartGesture(ScaleStartDetails onStart) {
-    setState(() {
-      _start = onStart.focalPoint;
-      xStart = _start.dx;
-      yStart = _start.dy;
-    });
-  }
-
-  void _scaleUpdateGesture(ScaleUpdateDetails onUpdate) {
-    setState(
-          () {
-        _start ??= onUpdate.focalPoint;
-        _end = onUpdate.focalPoint;
-        xEnd = _end.dx;
-        yEnd = _end.dy;
-      },
-    );
-  }
-
-  void _scaleEndGesture(ScaleEndDetails onEnd) {
-    setState(() {
-      // _start = null;
-      // _end = null;
-      // added.add(Rect.fromPoints(_start,_end));
-      added.add(Rect.fromLTRB(xStart, yStart-appBarHeight-MediaQuery.of(context).padding.top, xEnd, yEnd-appBarHeight-MediaQuery.of(context).padding.top));
-      for (Rect rect in added) {
-        if (rect.height<=0) {
-          added.remove(rect);
-        }
-        else if (rect.width<=0) {
-          added.remove(rect);
-        }
-      }
-    });
-  }
-
-  InteractiveViewer columnForBlur() {
-    return InteractiveViewer(
-      panEnabled: false,
-      onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
-      onInteractionUpdate: (details) =>
-          _scaleUpdateGesture(details),
-      onInteractionEnd: (details) =>
-          _scaleEndGesture(details),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height - appBarHeight,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-            children: [
-              Flexible(child: Image.asset('assets/giyu.png', height: MediaQuery.of(context).size.height,)),
-              for(Rect rect in added)
-                Positioned(
-                  top: rect.top,
-                  left: rect.left,
-                  child: Center(
-                    child: ClipRect(
-                      child: Container(
-                        // alignment: Alignment.center,
-                        width: rect.width,
-                        height: rect.height,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ),
-            ]
-        ),
-      ),
-    );
-  }
-
+  GlobalKey _globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('x: '+ x.toStringAsFixed(2) + ' y: ' + y.toStringAsFixed(2)),
+        title: Text('사진 저장'),
       ),
-      body: Container(
-        child: columnForBlur()
-        // GestureDetector(
-        //   onTapDown: (TapDownDetails details) {_updateLocation(details);},
-        //   // child: Center(
-        //   //   child: Container(
-        //   //     child: Image.network('http://pngimg.com/uploads/face/face_PNG5645.png'),
-        //   //   ),
-        //   // ),
-        // ),
+      body: Center(
+        child: Column(
+          children: [
+            Flexible(
+              child: RepaintBoundary(
+                key: _globalKey,
+                child: Stack(
+                  children: [
+                    Flexible(child: Image.asset('assets/giyu.png')),
+                    Positioned(
+                      top: 100,
+                      left: 100,
+                      child: Center(
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 5,
+                              sigmaY: 5,
+                            ),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              color: Colors.black.withOpacity(0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 15),
+              child: RaisedButton(
+                onPressed: _saveScreen,
+                child: Text("Save Local Image"),
+              ),
+              width: 200,
+              height: 44,
+            ),
+          ],
+        )
       ),
     );
+  }
+
+  _saveScreen() async {
+    RenderRepaintBoundary boundary =
+    _globalKey.currentContext.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage();
+    ByteData byteData = await (image.toByteData(format: ui.ImageByteFormat.png) as FutureOr<ByteData>);
+    if (byteData != null) {
+      final result =
+      await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+      print(result);
+      _toastInfo(result.toString());
+    }
+  }
+
+  _toastInfo(String info) {
+    Fluttertoast.showToast(msg: info, toastLength: Toast.LENGTH_LONG);
+  }
+
+}
+
+class ImageGallerySaver {
+  static const MethodChannel _channel =
+  const MethodChannel('image_gallery_saver');
+
+  /// save image to Gallery
+  /// imageBytes can't null
+  /// return Map type
+  /// for example:{"isSuccess":true, "filePath":String?}
+  static FutureOr<dynamic> saveImage(Uint8List imageBytes,
+      {int quality = 80,
+        String name,
+        bool isReturnImagePathOfIOS = false}) async {
+    assert(imageBytes != null);
+    final result =
+    await _channel.invokeMethod('saveImageToGallery', <String, dynamic>{
+      'imageBytes': imageBytes,
+      'quality': quality,
+      'name': name,
+      'isReturnImagePathOfIOS': isReturnImagePathOfIOS
+    });
+    return result;
+  }
+
+  /// Save the PNG，JPG，JPEG image or video located at [file] to the local device media gallery.
+  static Future saveFile(String file, {String name, bool isReturnPathOfIOS = false}) async {
+    assert(file != null);
+    final result = await _channel.invokeMethod(
+        'saveFileToGallery', <String, dynamic>{
+      'file': file,
+      'name': name,
+      'isReturnPathOfIOS': isReturnPathOfIOS
+    });
+    return result;
   }
 }
