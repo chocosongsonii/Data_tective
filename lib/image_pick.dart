@@ -1,4 +1,3 @@
-import 'package:data_tective/detect/detection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart'
@@ -7,8 +6,7 @@ import 'dart:io';
 
 import 'package:new_gradient_app_bar/new_gradient_app_bar.dart';
 
-import 'detect/detection_screen_copy_copy.dart';
-import 'detect/detection_screen_copy_copy_copy.dart';
+import 'detect/detection_screen.dart';
 
 
 ImagePicker picker = ImagePicker();
