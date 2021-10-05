@@ -164,16 +164,144 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
   static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[ //TODO: 스티커 추가하기 (예영)
     <String, dynamic>{
-      'name': 'heart',
+      'name': 'Bear',
       'img': 'assets/sticker1.png',
     },
     <String, dynamic>{
-      'name': 'Smiley Face',
+      'name': 'Pig',
       'img': 'assets/sticker2.png',
     },
     <String, dynamic>{
-      'name': 'Sunglasses',
+      'name': 'Tiger',
       'img': 'assets/sticker3.png',
+    },
+    <String, dynamic>{
+      'name': 'Rabbit',
+      'img': 'assets/sticker4.png',
+    },
+    <String, dynamic>{
+      'name': 'larva',
+      'img': 'assets/sticker5.png',
+    },
+    <String, dynamic>{
+      'name': 'Cat',
+      'img': 'assets/sticker6.png',
+    },
+    <String, dynamic>{
+      'name': 'Squirrel',
+      'img': 'assets/sticker7.png',
+    },
+    <String, dynamic>{
+      'name': 'Han1',
+      'img': 'assets/sticker8.png',
+    },
+    <String, dynamic>{
+      'name': 'Han2',
+      'img': 'assets/sticker9.png',
+    },
+    <String, dynamic>{
+      'name': 'Han3',
+      'img': 'assets/sticker10.png',
+    },
+    <String, dynamic>{
+      'name': 'Han4',
+      'img': 'assets/sticker11.png',
+    },
+    <String, dynamic>{
+      'name': 'Han5',
+      'img': 'assets/sticker12.png',
+    },
+    <String, dynamic>{
+      'name': 'Han6',
+      'img': 'assets/sticker13.png',
+    },
+    <String, dynamic>{
+      'name': 'Han7',
+      'img': 'assets/sticker14.png',
+    },
+    <String, dynamic>{
+      'name': 'Han8',
+      'img': 'assets/sticker15.png',
+    },
+    <String, dynamic>{
+      'name': 'Han9',
+      'img': 'assets/sticker16.png',
+    },
+    <String, dynamic>{
+      'name': 'Han10',
+      'img': 'assets/sticker17.png',
+    },
+    <String, dynamic>{
+      'name': 'Han11',
+      'img': 'assets/sticker18.png',
+    },
+    <String, dynamic>{
+      'name': 'Han12',
+      'img': 'assets/sticker19.png',
+    },
+    <String, dynamic>{
+      'name': 'Han13',
+      'img': 'assets/sticker20.png',
+    },
+    <String, dynamic>{
+      'name': 'Han14',
+      'img': 'assets/sticker21.png',
+    },
+    <String, dynamic>{
+      'name': 'Han15',
+      'img': 'assets/sticker22.png',
+    },
+    <String, dynamic>{
+      'name': 'Han16',
+      'img': 'assets/sticker23.png',
+    },
+    <String, dynamic>{
+      'name': 'Han17',
+      'img': 'assets/sticker24.png',
+    },
+    <String, dynamic>{
+      'name': 'Han18',
+      'img': 'assets/sticker25.png',
+    },
+    <String, dynamic>{
+      'name': 'Han19',
+      'img': 'assets/sticker26.png',
+    },
+    <String, dynamic>{
+      'name': 'Han20',
+      'img': 'assets/sticker27.png',
+    },
+    <String, dynamic>{
+      'name': 'Han21',
+      'img': 'assets/sticker28.png',
+    },
+    <String, dynamic>{
+      'name': 'Han22',
+      'img': 'assets/sticker29.png',
+    },
+    <String, dynamic>{
+      'name': 'Han23',
+      'img': 'assets/sticker30.png',
+    },
+    <String, dynamic>{
+      'name': 'Han24',
+      'img': 'assets/sticker31.png',
+    },
+    <String, dynamic>{
+      'name': 'white circle',
+      'img': 'assets/sticker32.png',
+    },
+    <String, dynamic>{
+      'name': ' gray circle',
+      'img': 'assets/sticker33.png',
+    },
+    <String, dynamic>{
+      'name': 'black circle',
+      'img': 'assets/sticker34.png',
+    },
+    <String, dynamic>{
+      'name': 'black rectangle',
+      'img': 'assets/sticker35.jpg',
     },
   ];
 
