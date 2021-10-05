@@ -14,6 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart' show canLaunch, launch;
 
+import '../home.dart';
+
 class DetectionScreen extends StatefulWidget {
   final File imageFile;
   const DetectionScreen(this.imageFile);
@@ -111,10 +113,16 @@ class _DetectionScreenState extends State<DetectionScreen> {
     final recognisedText = await textDetector.processImage(inputImage);
     final List<TextBlock> outputBlocks = recognisedText.blocks;
 
+    _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
+
+    var imageFile4 = await _stickerImage.readAsBytes();
+    ui.Image imageFile5 = await decodeImageFromList(imageFile4);
+
     setState(() {
       imageImage = imageFile2;
       faces = outputFaces;
       textBlocks = outputBlocks;
+
       for(TextBlock block in textBlocks) {
         for (TextLine line in block.lines) {
           textLines.add(line);
@@ -143,9 +151,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
       for (Face face in faces) {
         widthSum += face.boundingBox.width;
         widthAverage = widthSum/faces.length;
-        // if (face.boundingBox.width > widthAverage*1.2) {
-        //   toRemoveFace.add(face);
-        // }
       }
       for (Face face in faces) {
         if (face.boundingBox.width > widthAverage*1.2) {
@@ -154,10 +159,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
       }
       faces.removeWhere((face) => toRemoveFace.contains(face));
 
-      // for (Face face in faces) {
-      //   removeFace(face);
-      // }
-
+      stickerImage = imageFile5;
     });
   }
 
@@ -198,19 +200,24 @@ class _DetectionScreenState extends State<DetectionScreen> {
   }
 
   void bringSticker() async {
-    setState(() async {
-      _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
-    });
-  }
+    _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
 
-  void convertImageType() async {
-    var imageFile = await _stickerImage.readAsBytes();
-    ui.Image imageFile2 = await decodeImageFromList(imageFile);
+    var imageFile4 = await _stickerImage.readAsBytes();
+    ui.Image imageFile5 = await decodeImageFromList(imageFile4);
 
     setState(() {
-      stickerImage = imageFile2;
+      stickerImage = imageFile5;
     });
   }
+
+  // void convertImageType() async {
+  //   var imageFile = await _stickerImage.readAsBytes();
+  //   ui.Image imageFile2 = await decodeImageFromList(imageFile);
+  //
+  //   setState(() {
+  //     stickerImage = imageFile2;
+  //   });
+  // }
 
   void _scaleStartGesture(ScaleStartDetails onStart) {
     setState(() {
@@ -313,97 +320,101 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                           showModalBottomSheet(context: context, builder: (context) {
                                             return Padding(
                                               padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                      '초상권 침해',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight.w700,
-                                                          fontSize: 26)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  const Text(
-                                                      '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  OutlinedButton(
-                                                      onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                        '초상권 침해',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight.w700,
+                                                            fontSize: 26)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    const Text(
+                                                        '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    OutlinedButton(
+                                                        onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
 
-                                                      child: const Text(
-                                                          "자세히 알아보기",
-                                                          style: TextStyle(
-                                                              color:  Colors.black45,
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.w500,
-                                                              height: 1.5)
-                                                      )
-                                                  ),
-                                                  const SizedBox(height: 30),
-                                                  const Text(
-                                                      '개인 신상정보 노출',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight.w700,
-                                                          fontSize: 26)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  const Text(
-                                                      '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  OutlinedButton(
-                                                      onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
-
-                                                      child: const Text(
-                                                          "자세히 알아보기",
-                                                          style: TextStyle(
-                                                              color:  Colors.black45,
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.w500,
-                                                              height: 1.5)
-                                                      )
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      OutlinedButton(
-                                                          style: OutlinedButton.styleFrom(
-                                                              backgroundColor: Colors.red,
-                                                              side: const BorderSide(color: Colors.red, width: 1)
-                                                          ),
-                                                          onPressed: () {
-                                                            faces.remove(face);
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: const Text(
-                                                            '검열 해제',
+                                                        child: const Text(
+                                                            "자세히 알아보기",
                                                             style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily: 'SCDream',
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w500,
+                                                                color:  Colors.black45,
+                                                                fontSize: 12,
+                                                                fontWeight: FontWeight.w500,
+                                                                height: 1.5)
+                                                        )
+                                                    ),
+                                                    const SizedBox(height: 30),
+                                                    const Text(
+                                                        '개인 신상정보 노출',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight.w700,
+                                                            fontSize: 26)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    const Text(
+                                                        '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    OutlinedButton(
+                                                        onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
+
+                                                        child: const Text(
+                                                            "자세히 알아보기",
+                                                            style: TextStyle(
+                                                                color:  Colors.black45,
+                                                                fontSize: 12,
+                                                                fontWeight: FontWeight.w500,
+                                                                height: 1.5)
+                                                        )
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        OutlinedButton(
+                                                            style: OutlinedButton.styleFrom(
+                                                                backgroundColor: Colors.red,
+                                                                side: const BorderSide(color: Colors.red, width: 1)
                                                             ),
-                                                          )),
-                                                    ],
-                                                  )
-                                                ],
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                              setState(() {
+                                                                faces.remove(face);
+                                                              });
+                                                            },
+                                                            child: const Text(
+                                                              '검열 해제',
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontFamily: 'SCDream',
+                                                                color: Colors.white,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                            )),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           });
@@ -435,63 +446,67 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                           showModalBottomSheet(context: context, builder: (context) {
                                             return Padding(
                                               padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                      '개인 고유 식별정보 노출',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight.w700,
-                                                          fontSize: 26)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  const Text(
-                                                      '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
-                                                      style: TextStyle(
-                                                          fontFamily: 'SCDream4',
-                                                          color: Colors.black,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  OutlinedButton(
-                                                      onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
-                                                      child: const Text(
-                                                          "자세히 알아보기",
-                                                          style: TextStyle(
-                                                              color:  Colors.black45,
-                                                              fontSize: 12,
-                                                              fontWeight: FontWeight.w500,
-                                                              height: 1.5)
-                                                      )
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      OutlinedButton(
-                                                          style: OutlinedButton.styleFrom(
-                                                              backgroundColor: Colors.red,
-                                                              side: const BorderSide(color: Colors.red, width: 1)
-                                                          ),
-                                                          onPressed: () {
-                                                            textLines.remove(textLine);
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: const Text(
-                                                            '검열 해제',
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                        '개인 고유 식별정보 노출',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight.w700,
+                                                            fontSize: 26)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    const Text(
+                                                        '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
+                                                        style: TextStyle(
+                                                            fontFamily: 'SCDream4',
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    OutlinedButton(
+                                                        onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
+                                                        child: const Text(
+                                                            "자세히 알아보기",
                                                             style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily: 'SCDream',
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w500,
+                                                                color:  Colors.black45,
+                                                                fontSize: 12,
+                                                                fontWeight: FontWeight.w500,
+                                                                height: 1.5)
+                                                        )
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                        OutlinedButton(
+                                                            style: OutlinedButton.styleFrom(
+                                                                backgroundColor: Colors.red,
+                                                                side: const BorderSide(color: Colors.red, width: 1)
                                                             ),
-                                                          )),
-                                                    ],
-                                                  )
-                                                ],
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                              setState(() {
+                                                                textLines.remove(textLine);
+                                                              });
+                                                            },
+                                                            child: const Text(
+                                                              '검열 해제',
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontFamily: 'SCDream',
+                                                                color: Colors.white,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                            )),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
                                             );
                                           });
@@ -598,97 +613,101 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                       showModalBottomSheet(context: context, builder: (context) {
                                         return Padding(
                                           padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                  '초상권 침해',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.w700,
-                                                      fontSize: 26)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              const Text(
-                                                  '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 1.5)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              OutlinedButton(
-                                                  onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                    '초상권 침해',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w700,
+                                                        fontSize: 26)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                const Text(
+                                                    '타인의 얼굴을 고의 또는 실수로 찍어 유출하면\n초상권 침해로 손해배상을 청구 당할 수 있습니다',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500,
+                                                        height: 1.5)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                OutlinedButton(
+                                                    onPressed: () => { launch("https://www.hani.co.kr/arti/culture/culture_general/786601.html") },
 
-                                                  child: const Text(
-                                                      "자세히 알아보기",
-                                                      style: TextStyle(
-                                                          color:  Colors.black45,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  )
-                                              ),
-                                              const SizedBox(height: 30),
-                                              const Text(
-                                                  '개인 신상정보 노출',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.w700,
-                                                      fontSize: 26)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              const Text(
-                                                  '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 1.5)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              OutlinedButton(
-                                                  onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
-
-                                                  child: const Text(
-                                                      "자세히 알아보기",
-                                                      style: TextStyle(
-                                                          color:  Colors.black45,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  )
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  OutlinedButton(
-                                                      style: OutlinedButton.styleFrom(
-                                                          backgroundColor: Colors.red,
-                                                          side: const BorderSide(color: Colors.red, width: 1)
-                                                      ),
-                                                      onPressed: () {
-                                                        faces.remove(face);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                        '검열 해제',
+                                                    child: const Text(
+                                                        "자세히 알아보기",
                                                         style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontFamily: 'SCDream',
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.w500,
+                                                            color:  Colors.black45,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    )
+                                                ),
+                                                const SizedBox(height: 30),
+                                                const Text(
+                                                    '개인 신상정보 노출',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w700,
+                                                        fontSize: 26)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                const Text(
+                                                    '자신의 얼굴이 들어간 사진을 노출하게 되면\n딥페이크, 사기 등의 범죄에 악용될 수 있습니다.',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500,
+                                                        height: 1.5)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                OutlinedButton(
+                                                    onPressed: () => { launch("https://news.kbs.co.kr/news/view.do?ncd=5197994&ref=A") },
+
+                                                    child: const Text(
+                                                        "자세히 알아보기",
+                                                        style: TextStyle(
+                                                            color:  Colors.black45,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    )
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    OutlinedButton(
+                                                        style: OutlinedButton.styleFrom(
+                                                            backgroundColor: Colors.red,
+                                                            side: const BorderSide(color: Colors.red, width: 1)
                                                         ),
-                                                      )),
-                                                ],
-                                              )
-                                            ],
+                                                        onPressed: () {
+                                                          Navigator.pop(context);
+                                                          setState(() {
+                                                            faces.remove(face);
+                                                          });
+                                                        },
+                                                        child: const Text(
+                                                          '검열 해제',
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily: 'SCDream',
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        )),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         );
                                       });
@@ -714,63 +733,67 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                       showModalBottomSheet(context: context, builder: (context) {
                                         return Padding(
                                           padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                  '개인 고유 식별정보 노출',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.w700,
-                                                      fontSize: 26)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              const Text(
-                                                  '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
-                                                  style: TextStyle(
-                                                      fontFamily: 'SCDream4',
-                                                      color: Colors.black,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w500,
-                                                      height: 1.5)
-                                              ),
-                                              const SizedBox(height: 10),
-                                              OutlinedButton(
-                                                  onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
-                                                  child: const Text(
-                                                      "자세히 알아보기",
-                                                      style: TextStyle(
-                                                          color:  Colors.black45,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w500,
-                                                          height: 1.5)
-                                                  )
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  OutlinedButton(
-                                                      style: OutlinedButton.styleFrom(
-                                                          backgroundColor: Colors.red,
-                                                          side: const BorderSide(color: Colors.red, width: 1)
-                                                      ),
-                                                      onPressed: () {
-                                                        textLines.remove(textLine);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                        '검열 해제',
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                    '개인 고유 식별정보 노출',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w700,
+                                                        fontSize: 26)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                const Text(
+                                                    '자동차 번호판과 같은 개인정보는 내 다른 개인정보와\n결합하게 되면 사기 등의 범죄에 악용될 수 있습니다.',
+                                                    style: TextStyle(
+                                                        fontFamily: 'SCDream4',
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500,
+                                                        height: 1.5)
+                                                ),
+                                                const SizedBox(height: 10),
+                                                OutlinedButton(
+                                                    onPressed: () => { launch("https://www.hani.co.kr/arti/economy/it/989178.html") },
+                                                    child: const Text(
+                                                        "자세히 알아보기",
                                                         style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontFamily: 'SCDream',
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.w500,
+                                                            color:  Colors.black45,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w500,
+                                                            height: 1.5)
+                                                    )
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    OutlinedButton(
+                                                        style: OutlinedButton.styleFrom(
+                                                            backgroundColor: Colors.red,
+                                                            side: const BorderSide(color: Colors.red, width: 1)
                                                         ),
-                                                      )),
-                                                ],
-                                              )
-                                            ],
+                                                        onPressed: () {
+                                                          Navigator.pop(context);
+                                                          setState(() {
+                                                            textLines.remove(textLine);
+                                                          });
+                                                        },
+                                                        child: const Text(
+                                                          '검열 해제',
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily: 'SCDream',
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                        )),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         );
                                       });
@@ -787,6 +810,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                             ),
                           CustomPaint(
                               painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
+                            isComplex: true,
+                            willChange: true,
                           ),
                         ]
                       ),
@@ -814,10 +839,9 @@ class _DetectionScreenState extends State<DetectionScreen> {
                       StickerOption(
                         stickers[i]['name'] as String,
                         img: stickers[i]['img'] as String,
-                        onTap: () async {
+                        onTap: () {
                           checkOption(i + 1);
-                          _stickerImage = await getImageFileFromAssets('sticker'+_stickerId.toString()+'.png');
-                          convertImageType();
+                          bringSticker();
                         },
                         selected: i + 1 == _stickerId,
                       )
@@ -852,22 +876,40 @@ class _DetectionScreenState extends State<DetectionScreen> {
                   added.removeLast();
                 });
               },
-              icon: const Icon(Icons.reply))
-          // TextButton(
-          //     onPressed: () {
-          //       for(TextBlock block in textBlocks) {
-          //         print('textBlock: ${block.text}');
-          //         for (TextLine line in block.lines) {
-          //           print('line: ${line.text}');
-          //         }
-          //       }
-          //     },
-          //     child: const Text('읽기', style: TextStyle(color: Colors.white),)),
-          // Visibility(
-          //   visible: stickerVisibility,
-          //   child: TextButton(onPressed: convertImageType,
-          //       child: const Text('검열', style: TextStyle(color: Colors.white),)),
-          // )
+              icon: const Icon(Icons.reply)),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text(
+                          '홈으로 돌아가기',
+                          style: TextStyle(fontFamily: 'SCDream6')),
+                      content: const Text('홈으로 돌아가게 될 시 지금까지 검열한 모든 정보가 사라집니다.\n정말로 홈화면으로 돌아가시겠습니까?',
+                        style: TextStyle(fontFamily: 'SCDream4'),),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                            '취소',
+                            style: TextStyle(fontFamily: 'SCDream4', color: Colors.black))),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => const Home()));
+                            },
+                            child: const Text(
+                                '네, 홈으로 돌아갈래요',
+                                style: TextStyle(fontFamily: 'SCDream4', color: Color(0xff647dee))))
+                      ],
+                    );
+                  });
+            },
+            icon: const Icon(Icons.home),
+          )
         ],
       ),
       body: Padding(
@@ -887,10 +929,17 @@ class _DetectionScreenState extends State<DetectionScreen> {
                   initialLabelIndex: selectedIndex,
                   totalSwitches: 2,
                   labels: const ['블러', '스티커'],
+                  customTextStyles: const [
+                    TextStyle(
+                      fontFamily: 'SCDream4'
+                    ),
+                    TextStyle(
+                        fontFamily: 'SCDream4'
+                    )
+                  ],
                   radiusStyle: true,
                   onToggle: (index) {
                     bringSticker();
-                    convertImageType();
                     setState(() {
                       selectedIndex = index;
                     });
@@ -1091,7 +1140,7 @@ class StickerDraw extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }
 
@@ -1160,7 +1209,7 @@ class StickerOption extends StatelessWidget {
 
 class ImageGallerySaver {
   static const MethodChannel _channel =
-  const MethodChannel('image_gallery_saver');
+  MethodChannel('image_gallery_saver');
 
   /// save image to Gallery
   /// imageBytes can't null
