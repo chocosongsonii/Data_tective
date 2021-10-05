@@ -9,7 +9,6 @@
 // import 'package:toggle_switch/toggle_switch.dart';
 // import 'package:touchable/touchable.dart';
 // import 'blur.dart';
-// import 'sticker_cover.dart';
 //
 // class DetectionScreen extends StatefulWidget {
 //   final File imageFile;
