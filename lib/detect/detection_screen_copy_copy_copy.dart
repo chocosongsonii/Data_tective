@@ -184,6 +184,134 @@ class _DetectionScreenState extends State<DetectionScreen> {
       'name': 'Sunglasses',
       'img': 'assets/sticker3.png',
     },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker4.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker5.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker6.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker7.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker8.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker9.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker10.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker11.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker12.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker13.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker14.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker15.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker16.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker17.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker18.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker19.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker20.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker21.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker22.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker23.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker24.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker25.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker26.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker27.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker28.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker29.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker30.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker31.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker32.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker33.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker34.png',
+    },
+    <String, dynamic>{
+      'name': 'Sunglasses',
+      'img': 'assets/sticker35.jpg',
+    },
   ];
 
   void checkOption(int index) {

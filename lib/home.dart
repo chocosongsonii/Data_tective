@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 20.0),
               const Center(
                 child: Text(
-                    '검열할 이미지를 선택해주세요',
+                    '검열할 이미지를 \n  선택해주세요',
                   style: TextStyle(
                       fontSize: 20.0,
                       fontFamily: 'SCDream6'
