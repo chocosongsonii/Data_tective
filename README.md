@@ -15,7 +15,7 @@ SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한
 
 ## 앱 기능
 
-1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
+### 1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
 
 ``` Dart
 XFile image = await imagePicker.pickImage(
@@ -26,7 +26,7 @@ XFile image = await imagePicker.pickImage(
 
 Image Picker을 사용하여 갤러리 또는 카메라에서 사진을 불러옵니다.
 
-2. AI 검열
+### 2. AI 검열
 
 ``` Dart
 final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDetectorOptions(
