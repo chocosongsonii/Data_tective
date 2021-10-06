@@ -21,9 +21,8 @@ SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한
             source: sourceType,
             imageQuality: 50,
             preferredCameraDevice: CameraDevice.front);
-        setState(() {
-          imageFile = File(image.path);
-        });
+
+일반적인 텍스트
 
 
 This project is a starting point for a Flutter application.
