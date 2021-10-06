@@ -3,6 +3,26 @@
 #### 2021 삼성 주니어 SW 창작대회
 Da-tective팀이 만든 내 손 안의 작은 AI 탐정
 
+## 설치 방법
+
+**Step 1:** 레파지토리를 다운로드 하거나 클론을 합니다
+
+```
+git clone https://github.com/chocosongsonii/Data_tective
+```
+
+**Step 2:** 프로젝트에 필요한 패키지를 다운로드합니다
+
+```
+flutter pub get
+```
+
+**Step 3:** 플러터 앱을 실행합니다.
+
+```
+flutter run
+```
+
 ## 프로젝트 계획 이유
 
 휴대폰이 보급되고 SNS 사용이 빈번해지는 요즘 시대에 SNS 이용을 하는 사람들이 많아지고 있습니다.
@@ -95,17 +115,4 @@ AI를 통해 검열된 얼굴 또는 텍스트는 좌측 상단에 빨간색 '!'
 검열을 추가할 때는 좌측 상단에서 우측 하단 방향으로 드래그하여 추가할 수 있습니다.
 (이 방향이 지켜지지 않을 경우 검열이 추가되지 않습니다.)
 
-
-
-
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+추가한 검열이 마음에 들지 않는다면 화면의 우측 상단에 위치한 뒤로가기 버튼을 눌러 취소할 수 있습니다.
