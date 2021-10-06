@@ -1,4 +1,4 @@
-# Data_tective
+# Data-tective
 
 #### 2021 삼성 주니어 SW 창작대회
 Da-tective팀이 만든 내 손 안의 작은 AI 탐정
@@ -43,6 +43,8 @@ XFile image = await imagePicker.pickImage(
             imageQuality: 50,
             preferredCameraDevice: CameraDevice.front);
 ```
+
+------------
 
 ### 2. AI 검열
 
@@ -91,6 +93,8 @@ for (Face face in faces) {
 faces.removeWhere((face) => toRemoveFace.contains(face));
 ```
 
+------------
+
 ### 3. 검열 방법 설정
 
 상단의 Toggle Switch를 이용하여 이미지를 검열할 방식을 고를 수 있습니다.
@@ -103,6 +107,8 @@ faces.removeWhere((face) => toRemoveFace.contains(face));
 
 (스티커 사용하는 git올리기)
 
+------------
+
 ### 4. 관련 정보 제공
 
 AI를 통해 검열된 얼굴 또는 텍스트는 좌측 상단에 빨간색 '!' 이 뜹니다.
@@ -114,6 +120,8 @@ AI를 통해 검열된 얼굴 또는 텍스트는 좌측 상단에 빨간색 '!'
 이 하단 페이지에서는 검열된 개인정보에 대한 설명과 관련 링크로의 하이퍼링크를 제공합니다.
 
 또한 우측 하단에 있는 검열 해제 버튼을 눌러 검열을 해제할 수 있습니다.
+
+------------
 
 ### 5. 추가 검열
 
