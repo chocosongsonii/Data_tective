@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
                       fontFamily: 'SCDream6',
                       color: Colors.black,
                     ),),
-                  initiallyExpanded: true,
+                  initiallyExpanded: false,
                   backgroundColor: Colors.transparent,
                   iconColor: const Color(0xff647dee),
                   children: <Widget>[
