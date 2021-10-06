@@ -71,6 +71,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
   GlobalKey _globalKey = GlobalKey();
 
+  bool alertVisibility = true;
+
   @override
   void initState() {
     super.initState();
@@ -452,8 +454,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
         Flexible(
           flex: 15,
           child: InteractiveViewer(
-            // minScale: 0.1,
-            // maxScale: 5,
+            minScale: 0.1,
+            maxScale: 5,
             onInteractionStart: (ScaleStartDetails details) {_scaleStartGesture(details);},
             onInteractionUpdate: (details) =>
                 _scaleUpdateGesture(details),
@@ -709,8 +711,11 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                   ),
                                 ),
                               ),
-                            CustomPaint(
-                              painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
+                            Visibility(
+                              visible: alertVisibility,
+                              child: CustomPaint(
+                                painter: BlurDraw(context, faces: faces, imageImage: imageImage, textLines : textLines),
+                              ),
                             ),
                           ]
                       ),
@@ -974,10 +979,13 @@ class _DetectionScreenState extends State<DetectionScreen> {
                                   ),
                                 ),
                               ),
-                            CustomPaint(
-                              painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
-                              isComplex: true,
-                              willChange: true,
+                            Visibility(
+                              visible: alertVisibility,
+                              child: CustomPaint(
+                                painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
+                                isComplex: true,
+                                willChange: true,
+                              ),
                             ),
                           ]
                       ),
@@ -1125,15 +1133,64 @@ class _DetectionScreenState extends State<DetectionScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // _saveScreen();
-          shareImage(context);
-          print(imagePaths.length);
+      floatingActionButton: PopupMenuButton(
+        child: const CircleAvatar(
+          radius: 30,
+          child: Icon(Icons.save_alt, color: Colors.white,),
+          backgroundColor: Color(0xff647dee),
+        ),
+        onSelected: (value) {
+          setState(() {
+            alertVisibility = value;
+            if (imagePaths.isNotEmpty) {
+              imagePaths.clear();
+            }
+          });
         },
-        tooltip: 'Select',
-        child: const Icon(Icons.image),
+          onCanceled: () {
+            setState(() {
+              alertVisibility = true;
+            });
+          },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            child: const Text('사진 저장하기',
+                style: TextStyle(
+                    fontFamily: 'SCDream4'
+                )),
+            value: false,
+            onTap: () {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                _saveScreen();
+              });
+              },),
+          PopupMenuItem(
+            child: const Text('사진 공유하기',
+                style: TextStyle(
+                    fontFamily: 'SCDream4'
+                )),
+            value: false,
+            onTap: () {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                shareImage(context);
+              });
+              },)
+        ]
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // _saveScreen();
+      //     shareImage(context);
+      //     setState(() {
+      //       alertVisibility = false;
+      //       if (imagePaths.isNotEmpty) {
+      //         imagePaths.clear();
+      //       }
+      //     });
+      //   },
+      //   tooltip: 'Select',
+      //   child: const Icon(Icons.image),
+      // ),
     );
   }
 }
