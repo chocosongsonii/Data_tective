@@ -79,8 +79,47 @@ flutter:
     - assets/sticker1.png
     - assets/sticker2.png
     - assets/sticker3.png
+    - assets/sticker4.png
+    - assets/sticker5.png
+    - assets/sticker6.png
+    - assets/sticker7.png
+    - assets/sticker8.png
+    - assets/sticker9.png
+    - assets/sticker10.png
+    - assets/sticker11.png
+    - assets/sticker12.png
+    - assets/sticker13.png
+    - assets/sticker14.png
+    - assets/sticker15.png
+    - assets/sticker16.png
+    - assets/sticker17.png
+    - assets/sticker18.png
+    - assets/sticker19.png
+    - assets/sticker20.png
+    - assets/sticker21.png
+    - assets/sticker22.png
+    - assets/sticker23.png
+    - assets/sticker24.png
+    - assets/sticker25.png
+    - assets/sticker26.png
+    - assets/sticker27.png
+    - assets/sticker28.png
+    - assets/sticker29.png
+    - assets/sticker30.png
+    - assets/sticker31.png
+    - assets/sticker32.png
+    - assets/sticker33.png
+    - assets/sticker34.png
+    - assets/sticker35.png
 
-  # An image asset can refer to one or more resolution-specific "variants", see
+
+
+
+
+
+
+
+        # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
   # For details regarding adding assets from package dependencies, see
