@@ -18,13 +18,38 @@ SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한
 1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
 
 ``` Dart
-    XFile image = await imagePicker.pickImage(
+XFile image = await imagePicker.pickImage(
             source: sourceType,
             imageQuality: 50,
             preferredCameraDevice: CameraDevice.front);
 ```
 
-일반적인 텍스트
+이미지 피커를 사용하여 갤러리 또는 카메라에서 사진을 불러옵니다.
+
+2. AI 검열
+
+``` Dart
+final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDetectorOptions(
+      enableClassification: true,
+      enableTracking: true,
+    ));
+    final TextDetector textDetector = GoogleMlKit.vision.textDetector();
+```
+
+GoogleMlKit을 사용하여 사진 속 모든 얼굴과 텍스트를 인식합니다.
+
+``` Dart
+for (var element in textLines) {
+        textStr = element.text;
+        num = textStr.replaceAll(RegExp(r'[^0-9]'), '');
+        if (num.length < 6) {
+          toRemoveTextLine.add(element);
+        }
+      }
+      textLines.removeWhere((element) => toRemoveTextLine.contains(element));
+```
+
+인식한 텍스트 속에 글자를 모두 삭제합니다. 그렇게 숫자만 남은 텍스트 길이가 6보다 작으면 해당 텍스트는 검열에서 제외됩니다.
 
 
 This project is a starting point for a Flutter application.
