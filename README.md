@@ -13,6 +13,22 @@ SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한
 
 실수로 나 자신 혹은 타인의 개인정보를 SNS에 업로드해버리는 당혹스러운 상황에서 사용자들을 지켜주기 위해 이 앱을 계획하게 되었습니다.
 
+## 앱 기능
+
+1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
+
+''' Dart
+void openImagePicker() async {
+    XFile image = await imagePicker.pickImage(
+        source: sourceType,
+        imageQuality: 50,
+        preferredCameraDevice: CameraDevice.front);
+    setState(() {
+      imageFile = File(image.path);
+    });
+  }
+'''
+
 
 This project is a starting point for a Flutter application.
 
