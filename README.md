@@ -31,8 +31,8 @@ GoogleMlKit을 사용하여 사진 속 모든 얼굴과 텍스트를 인식합�
 final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDetectorOptions(
       enableClassification: true,
       enableTracking: true,
-    ));
-    final TextDetector textDetector = GoogleMlKit.vision.textDetector();
+));
+final TextDetector textDetector = GoogleMlKit.vision.textDetector();
 ```
 
 인식한 텍스트 속에 글자를 모두 삭제합니다.
@@ -40,13 +40,13 @@ final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDete
 
 ``` Dart
 for (var element in textLines) {
-        textStr = element.text;
-        num = textStr.replaceAll(RegExp(r'[^0-9]'), '');
-        if (num.length < 6) {
-          toRemoveTextLine.add(element);
-        }
-      }
-      textLines.removeWhere((element) => toRemoveTextLine.contains(element));
+  textStr = element.text;
+  num = textStr.replaceAll(RegExp(r'[^0-9]'), '');
+  if (num.length < 6) {
+    toRemoveTextLine.add(element);
+  }
+}
+textLines.removeWhere((element) => toRemoveTextLine.contains(element));
 ```
 사진 속 인식된 얼굴이 하나일 경우 그 얼굴은 사용자일 확률이 높기 때문에 검열 대상에서 제외됩니다.
 또한 모든 얼굴들의 가로 길이를 평균을 내어 만일 얼굴의 가로 길이가 평균보다 1.2배 크면 그 얼굴은 사용자가 고의로 찍은 얼굴일 확률이 높기 때문에 검열 대상에서 제외됩니다.
@@ -54,29 +54,40 @@ for (var element in textLines) {
 ``` Dart
 if (faces.length <= 1) {
         faces.clear();
-      }
+}
 
-      for (Face face in faces) {
-        widthSum += face.boundingBox.width;
-        widthAverage = widthSum/faces.length;
-      }
-      for (Face face in faces) {
-        if (face.boundingBox.width > widthAverage*1.2) {
-          toRemoveFace.add(face);
-        }
-      }
-      faces.removeWhere((face) => toRemoveFace.contains(face));
+for (Face face in faces) {
+  widthSum += face.boundingBox.width;
+  widthAverage = widthSum/faces.length;
+}
+for (Face face in faces) {
+  if (face.boundingBox.width > widthAverage*1.2) {
+    toRemoveFace.add(face);
+  }
+}
+faces.removeWhere((face) => toRemoveFace.contains(face));
 ```
 
-### 3. 검열
+### 3. 검열 방법 설정
 
 상단의 Toggle Switch를 이용하여 이미지를 검열할 방식을 고를 수 있습니다.
 
 블러를 선택하면 슬라이더를 이용하여 블러강도를 조절할 수 있습니다.
-# 블러 슬라이더 사용하는 gif 올리기
+(블러 슬라이더 사용하는 gif 올리기)
 
 스티커를 선택하면 여러 스티커들 중 마음에 드는 스티커를 사용하여 검열을 할 수 있습니다.
-#스티커 사용하는 git올리기
+(스티커 사용하는 git올리기)
+
+### 4. 관련 정보 제공
+
+AI를 통해 검열된 얼굴 또는 텍스트는 좌측 상단에 빨간색 '!' 이 뜹니다.
+
+이때 '!'이 아닌 검열된 부분을 누르면 하단에서 페이지가 올라옵니다.
+(사진 추가)
+
+이 하단 페이지에서는 검열된 개인정보에 대한 설명과 관련 링크로의 하이퍼링크를 제공합니다.
+
+또한 우측 하단에 있는 검열 해제 버튼을 눌러 검열을 해제할 수 있습니다.
 
 
 
