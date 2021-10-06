@@ -6,16 +6,15 @@ Da-tective팀이 만든 내 손 안의 작은 AI 탐정
 ## 프로젝트 계획 이유
 
 휴대폰이 보급되고 SNS 사용이 빈번해지는 요즘 시대에 SNS 이용을 하는 사람들이 많아지고 있습니다.
-
 이 앱은 SNS 이용에 있어서 경각심이 별로 없는 사람들을 위해 AI탐정이 직접 체크해주고 가려주는 앱입니다.
-
 SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한편으로는 나의 중요한 개인정보들이 빠져나갈 수 있는 통로이기도 합니다.
-
 실수로 나 자신 혹은 타인의 개인정보를 SNS에 업로드해버리는 당혹스러운 상황에서 사용자들을 지켜주기 위해 이 앱을 계획하게 되었습니다.
 
 ## 앱 기능
 
 ### 1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
+
+Image Picker를 사용하여 갤러리 또는 카메라에서 사진을 불러옵니다.
 
 ``` Dart
 XFile image = await imagePicker.pickImage(
@@ -24,9 +23,9 @@ XFile image = await imagePicker.pickImage(
             preferredCameraDevice: CameraDevice.front);
 ```
 
-Image Picker을 사용하여 갤러리 또는 카메라에서 사진을 불러옵니다.
-
 ### 2. AI 검열
+
+GoogleMlKit을 사용하여 사진 속 모든 얼굴과 텍스트를 인식합니다.
 
 ``` Dart
 final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDetectorOptions(
@@ -36,7 +35,8 @@ final FaceDetector faceDetector = GoogleMlKit.vision.faceDetector(const FaceDete
     final TextDetector textDetector = GoogleMlKit.vision.textDetector();
 ```
 
-GoogleMlKit을 사용하여 사진 속 모든 얼굴과 텍스트를 인식합니다.
+인식한 텍스트 속에 글자를 모두 삭제합니다.
+그렇게 숫자만 남은 텍스트 길이가 6보다 작으면 해당 텍스트는 검열에서 제외됩니다.
 
 ``` Dart
 for (var element in textLines) {
@@ -48,8 +48,8 @@ for (var element in textLines) {
       }
       textLines.removeWhere((element) => toRemoveTextLine.contains(element));
 ```
-
-인식한 텍스트 속에 글자를 모두 삭제합니다. 그렇게 숫자만 남은 텍스트 길이가 6보다 작으면 해당 텍스트는 검열에서 제외됩니다.
+사진 속 인식된 얼굴이 하나일 경우 그 얼굴은 사용자일 확률이 높기 때문에 검열 대상에서 제외됩니다.
+또한 모든 얼굴들의 가로 길이를 평균을 내어 만일 얼굴의 가로 길이가 평균보다 1.2배 크면 그 얼굴은 사용자가 고의로 찍은 얼굴일 확률이 높기 때문에 검열 대상에서 제외됩니다.
 
 ``` Dart
 if (faces.length <= 1) {
@@ -68,9 +68,21 @@ if (faces.length <= 1) {
       faces.removeWhere((face) => toRemoveFace.contains(face));
 ```
 
-사진 속 인식된 얼굴이 하나일 경우 그 얼굴은 사용자일 확률이 높기 때문에 검열 대상에서 제외됩니다.
+### 3. 검열
 
-또한 모든 얼굴들의 가로 길이를 평균을 내어 만일 얼굴의 가로 길이가 평균보다 1.2배 크면 그 얼굴은 사용자가 고의로 찍은 얼굴일 확률이 높기 때문에 검열 대상에서 제외됩니다.
+상단의 Toggle Switch를 이용하여 이미지를 검열할 방식을 고를 수 있습니다.
+
+블러를 선택하면 슬라이더를 이용하여 블러강도를 조절할 수 있습니다.
+# 블러 슬라이더 사용하는 gif 올리기
+
+스티커를 선택하면 여러 스티커들 중 마음에 드는 스티커를 사용하여 검열을 할 수 있습니다.
+#스티커 사용하는 git올리기
+
+
+
+
+
+
 
 This project is a starting point for a Flutter application.
 
