@@ -17,15 +17,13 @@ SNS는 사람들이 자신을 표현할 수 있는 창구이기도 하지만 한
 
 1. 갤러리 또는 카메라를 사용해 검열할 사진 불러오기
 
-''' Dart
-XFile image = await imagePicker.pickImage(
-        source: sourceType,
-        imageQuality: 50,
-        preferredCameraDevice: CameraDevice.front);
-    setState(() {
-      imageFile = File(image.path);
-    });
-'''
+    XFile image = await imagePicker.pickImage(
+            source: sourceType,
+            imageQuality: 50,
+            preferredCameraDevice: CameraDevice.front);
+        setState(() {
+          imageFile = File(image.path);
+        });
 
 
 This project is a starting point for a Flutter application.
