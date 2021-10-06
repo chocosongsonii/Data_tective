@@ -1,6 +1,7 @@
-# data_tective
+# Data_tective
 
-A new Flutter project.
+2021 삼성 주니어 SW 창작대회
+Da-tective팀이 만든 내 손 안의 작은 AI 탐정
 
 ## Getting Started
 
