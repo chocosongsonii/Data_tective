@@ -1,6 +1,6 @@
 # Data_tective
 
-2021 삼성 주니어 SW 창작대회
+#### 2021 삼성 주니어 SW 창작대회
 Da-tective팀이 만든 내 손 안의 작은 AI 탐정
 
 ## Getting Started
