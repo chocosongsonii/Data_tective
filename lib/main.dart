@@ -3,6 +3,7 @@ import 'home.dart';
 
 void main() {
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primaryColor: Color(0xff647dee)
     ),

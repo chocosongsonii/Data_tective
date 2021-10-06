@@ -993,7 +993,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
           flex: 3,
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Expanded(
                 child: GridView.count(
                   shrinkWrap: true,
@@ -1330,45 +1330,48 @@ class StickerOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Ink.image(
-      fit: BoxFit.contain,
-      image: AssetImage(img),
-      child: InkWell(
-        onTap: onTap,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                      color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
-                      width: selected ?? false ? 10 : 0,
-                    )
-                )
-            ),
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              Flexible(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    title ?? '',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontFamily: 'Staatliches-Regular'
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Ink.image(
+        fit: BoxFit.contain,
+        image: AssetImage(img),
+        child: InkWell(
+          onTap: onTap,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: selected ?? false ? const Color(0xff647dee) : Colors.transparent,
+                        width: selected ?? false ? 10 : 0,
+                      )
+                  )
+              ),
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Flexible(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: selected ?? false ? const Color(0xff7f53ac) : Colors.black54,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      title ?? '',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Staatliches-Regular'
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],),
+                )
+              ],),
+            ),
           ),
         ),
       ),

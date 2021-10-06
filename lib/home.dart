@@ -85,9 +85,327 @@ class _HomeState extends State<Home> {
     ));
 
     List _widgetOptions = [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: columnForLicense(),
+      SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              ExpansionTile(
+                title: const Text(
+                  '앱에 사용된 폰트',
+                  style: TextStyle(
+                    fontFamily: 'SCDream6',
+                    color: Colors.black,
+                  ),),
+                initiallyExpanded: false,
+                backgroundColor: Colors.transparent,
+                iconColor: const Color(0xff647dee),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          '이 앱에는 에스코어가 제공한 에스코어 드림 폰트와 적용되어 있습니다.\n',
+                          style: TextStyle(
+                              fontFamily: 'SCDream4',
+                              fontSize: 15
+                          ),),
+                        Text(
+                          '이 앱에는 Google Fonts가 제공한 Staatliches-Regular 폰트가 적용되어 있습니다.',
+                          style: TextStyle(
+                              fontFamily: 'SCDream4',
+                              fontSize: 15
+                          ),),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              ExpansionTile(
+                  title: const Text('앱에 사용된 오픈소스들',
+                    style: TextStyle(
+                      fontFamily: 'SCDream6',
+                      color: Colors.black,
+                    ),),
+                  initiallyExpanded: true,
+                  backgroundColor: Colors.transparent,
+                  iconColor: const Color(0xff647dee),
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text('Flutter Face Detection\nTiagoDanin',
+                                  style: TextStyle(
+                                      fontFamily: 'Staatliches-Regular',
+                                      fontSize: 15
+                                  ),),
+                              ),
+                              Container(),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: const [
+                                    Text('MIT License\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('Copyright (c) 2021 Tiago Danin\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('Permission is hereby granted, free of charge, to any person obtaining a copy\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('of this software and associated documentation files (the "Software"), to deal\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('in the Software without restriction, including without limitation the rights\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('copies of the Software, and to permit persons to whom the Software is\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('furnished to do so, subject to the following conditions:\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('The above copyright notice and this permission notice shall be included in all\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('copies or substantial portions of the Software.\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('SOFTWARE.',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: Divider(height: 3),
+                          ),
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text('Flutter Plugins "Share"\nFlutter',
+                                  style: TextStyle(
+                                      fontFamily: 'Staatliches-Regular',
+                                      fontSize: 15
+                                  ),),
+                              ),
+                              Container(),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: const [
+                                    Text('Copyright 2013 The Flutter Authors. All rights reserved.\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('Redistribution and use in source and binary forms, with or without modification,\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('are permitted provided that the following conditions are met:\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('    * Redistributions of source code must retain the above copyright\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('      notice, this list of conditions and the following disclaimer.\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('    * Redistributions in binary form must reproduce the above\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('      copyright notice, this list of conditions and the following\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('      with the distribution.\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('    * Neither the name of Google Inc. nor the names of its\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('      contributors may be used to endorse or promote products derived\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('      from this software without specific prior written permission.\n\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                    Text('SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: Divider(height: 3),
+                          ),
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text('Selectable GridView\n@ramgendeploy',
+                                  style: TextStyle(
+                                      fontFamily: 'Staatliches-Regular',
+                                      fontSize: 15
+                                  ),),
+                              ),
+                              Container(),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: const [
+                                    Text('https://ramagg.com/flutter-selectable-grid/',
+                                      style: TextStyle(
+                                          fontFamily: 'SCDream4',
+                                          fontSize: 7
+                                      ),),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+              ),
+            ],
+          ),
+        ),
       ),
       Center(
         child: Padding(
@@ -102,13 +420,23 @@ class _HomeState extends State<Home> {
                 color: Color(0xff5565db),
               ),
               const SizedBox(height: 20.0),
-              const Center(
-                child: Text(
-                    '검열할 이미지를 \n  선택해주세요',
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      fontFamily: 'SCDream6'
-                  ),),
+              Center(
+                child: Column(
+                  children: const [
+                    Text(
+                        '검열할 이미지를',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'SCDream6',
+                      ),),
+                    Text(
+                      '선택해주세요',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontFamily: 'SCDream6',
+                      ),),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               OutlinedButton(
@@ -146,13 +474,14 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ExpansionTile(
                 title: const Text(
                   '이 앱은 무엇을 위한 앱인가요?',
                   style: TextStyle(
                     fontFamily: 'SCDream6',
-                    color: Colors.black
+                    color: Colors.black,
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
