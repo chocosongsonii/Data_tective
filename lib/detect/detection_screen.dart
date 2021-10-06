@@ -1068,7 +1068,8 @@ class _DetectionScreenState extends State<DetectionScreen> {
                             },
                             child: const Text(
                                 '네, 홈으로 돌아갈래요',
-                                style: TextStyle(fontFamily: 'SCDream4', color: Color(0xff647dee))))
+                                style: TextStyle(fontFamily: 'SCDream4', color: Color(
+                                    0xff647dee))))
                       ],
                     );
                   });
@@ -1126,13 +1127,15 @@ class _DetectionScreenState extends State<DetectionScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xff647dee),
         onPressed: () {
           // _saveScreen();
           shareImage(context);
           print(imagePaths.length);
         },
         tooltip: 'Select',
-        child: const Icon(Icons.image),
+
+        child: const Icon(Icons.save_alt_outlined,)
       ),
     );
   }
