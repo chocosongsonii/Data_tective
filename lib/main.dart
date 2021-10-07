@@ -5,8 +5,9 @@ void main() {
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      primaryColor: Color(0xff647dee)
+      primaryColor: const Color(0xff647dee),
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: const Color(0xff7f53ac))
     ),
-      home: Home()
+      home: const Home()
   ));
 }

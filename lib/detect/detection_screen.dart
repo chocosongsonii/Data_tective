@@ -15,8 +15,6 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart' show canLaunch, launch;
 
-import '../home.dart';
-
 class DetectionScreen extends StatefulWidget {
   final File imageFile;
   const DetectionScreen(this.imageFile);
@@ -173,7 +171,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
   //   }
   // }
 
-  static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[ //TODO: 스티커 추가하기 (예영)
+  static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[
     <String, dynamic>{
       'name': 'Bear',
       'img': 'assets/sticker1.png',
@@ -403,7 +401,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
     if (byteData != null) {
       final result =
       await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-      print(result);
       _toastInfo(result.toString());
     }
     final directory = await getApplicationDocumentsDirectory();

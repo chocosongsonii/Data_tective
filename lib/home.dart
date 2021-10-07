@@ -31,52 +31,6 @@ class _HomeState extends State<Home> {
     // _loadId();
   }
 
-  // Column columnForLicense() {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     children: [
-  //       Flexible(
-  //         child: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: const [
-  //               Text(
-  //                 'Licences',
-  //                 style: TextStyle(
-  //                   fontSize: 30,
-  //                   fontFamily: 'Staatliches-Regular',
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               SizedBox(height: 10),
-  //               Text(
-  //                 '폰트',
-  //                 style: TextStyle(
-  //                   fontSize: 20,
-  //                   fontFamily: 'SCDream6',
-  //                 ),
-  //               ),
-  //               Text(
-  //                   '이 앱에는 에스코어가 제공한 에스코어 드림 폰트가 적용되어 있습니다.',
-  //                   style: TextStyle(
-  //                     fontSize: 10,
-  //                     fontFamily: 'SCDream4',
-  //                   )
-  //               ),
-  //               Text(
-  //                   '이 앱에는 Google Fonts가 제공한 Staatliches-Regular 폰트가 적용되어 있습니다.',
-  //                   style: TextStyle(
-  //                     fontSize: 10,
-  //                     fontFamily: 'SCDream4',
-  //                   )
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
 
@@ -136,21 +90,25 @@ class _HomeState extends State<Home> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          '이 앱에는 에스코어가 제공한 에스코어 드림 폰트와 적용되어 있습니다.\n',
-                          style: TextStyle(
-                              fontFamily: 'SCDream4',
-                              fontSize: 15
-                          ),),
-                        Text(
-                          '이 앱에는 Google Fonts가 제공한 Staatliches-Regular 폰트가 적용되어 있습니다.',
-                          style: TextStyle(
-                              fontFamily: 'SCDream4',
-                              fontSize: 15
-                          ),),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => Theme(
+                              data: ThemeData.dark(),
+                              child: LicensePage(
+                                applicationIcon: Image.asset('assets/splash.png'),
+                                applicationName: 'Data-tective',
+                              ),
+                            )));
+                          },
+                          child: Text('라이선스 보러 가기 >',
+                            style: TextStyle(
+                              fontFamily: 'SCDream6',
+                              color: Colors.black,
+                            ),)
+                        )
                       ],
                     ),
                   )
@@ -179,7 +137,7 @@ class _HomeState extends State<Home> {
                               fontFamily: 'SCDream6',
                               color: Colors.black,
                             ),),
-                          subtitle: Text('TiagoDanin', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
+                          subtitle: const Text('TiagoDanin', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
                           controlAffinity: ListTileControlAffinity.leading,
                           initiallyExpanded: false,
                           backgroundColor: Colors.transparent,
@@ -284,7 +242,7 @@ class _HomeState extends State<Home> {
                               fontFamily: 'SCDream6',
                               color: Colors.black,
                             ),),
-                          subtitle: Text('Flutter', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
+                          subtitle: const Text('Flutter', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
                           controlAffinity: ListTileControlAffinity.leading,
                           initiallyExpanded: false,
                           backgroundColor: Colors.transparent,
@@ -409,7 +367,7 @@ class _HomeState extends State<Home> {
                               fontFamily: 'SCDream6',
                               color: Colors.black,
                             ),),
-                          subtitle: Text('@ramgendeploy', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
+                          subtitle: const Text('@ramgendeploy', style: TextStyle(fontFamily: 'SCDream6', color: Colors.black),),
                           controlAffinity: ListTileControlAffinity.leading,
                           initiallyExpanded: false,
                           backgroundColor: Colors.transparent,
@@ -514,7 +472,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -553,7 +511,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -661,7 +619,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -700,7 +658,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -714,7 +672,7 @@ class _HomeState extends State<Home> {
                               fontSize: 15
                           ),),
                         Text(
-                          '만일 이 앱과 같은 기능을 가진 오픈 소스가 있다면 영상 편집 앱, SNS 앱 등에서 활용ehl어 사용자들이 한층 더 쉽고 빠르게 개인정보를 검열할 수 있게 될 것입니다.\n',
+                          '만일 이 앱과 같은 기능을 가진 오픈 소스가 있다면 영상 편집 앱, SNS 앱 등에서 활용되어 사용자들이 한층 더 쉽고 빠르게 개인정보를 검열할 수 있게 될 것입니다.\n',
                           style: TextStyle(
                               fontFamily: 'SCDream4',
                               fontSize: 15
@@ -739,7 +697,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -772,7 +730,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -865,7 +823,7 @@ class _HomeState extends State<Home> {
                   ),),
                 initiallyExpanded: false,
                 backgroundColor: Colors.transparent,
-                iconColor: Color(0xff647dee),
+                iconColor: const Color(0xff647dee),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(20.0),
