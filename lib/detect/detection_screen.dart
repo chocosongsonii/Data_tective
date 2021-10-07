@@ -982,11 +982,19 @@ class _DetectionScreenState extends State<DetectionScreen> {
                             Visibility(
                               visible: alertVisibility,
                               child: CustomPaint(
-                                painter: StickerDraw(context, faces, textLines, imageImage, stickerImage,added),
+                                painter: StickerDrawWithAlert(context, faces, textLines, imageImage, stickerImage,added),
                                 isComplex: true,
                                 willChange: true,
                               ),
                             ),
+                            Visibility(
+                              visible: !alertVisibility,
+                                child: CustomPaint(
+                                  painter: StickerDrawWithoutAlert(context, faces, textLines, imageImage, stickerImage,added),
+                                  isComplex: true,
+                                  willChange: true,
+                                ),
+                            )
                           ]
                       ),
                     ),
@@ -1271,7 +1279,7 @@ class BlurDraw extends CustomPainter {
   }
 }
 
-class StickerDraw extends CustomPainter {
+class StickerDrawWithAlert extends CustomPainter {
   List<Face> faces;
   List<TextLine> textLines;
   List<Rect> added;
@@ -1279,7 +1287,7 @@ class StickerDraw extends CustomPainter {
   final BuildContext context;
   ui.Image coverImage;
 
-  StickerDraw(this.context, this.faces, this.textLines, this.image, this.coverImage, this.added);
+  StickerDrawWithAlert(this.context, this.faces, this.textLines, this.image, this.coverImage, this.added);
 
   @override
 
@@ -1352,6 +1360,55 @@ class StickerDraw extends CustomPainter {
 
       paintSpanId.layout();
       paintSpanId.paint(canvas, Offset(textLine.rect.left - textLine.rect.width/60, textLine.rect.top - textLine.rect.width/16));
+
+    }
+
+    for (Rect rect in added) {
+      canvas.drawImageRect(
+          coverImage,
+          Offset.zero & Size(coverImage.width.toDouble(), coverImage.height.toDouble()),
+          Offset(rect.left, rect.top) & Size(rect.width, rect.height),
+          Paint());
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class StickerDrawWithoutAlert extends CustomPainter {
+  List<Face> faces;
+  List<TextLine> textLines;
+  List<Rect> added;
+  ui.Image image;
+  final BuildContext context;
+  ui.Image coverImage;
+
+  StickerDrawWithoutAlert(this.context, this.faces, this.textLines, this.image, this.coverImage, this.added);
+
+  @override
+
+  void paint(Canvas canvas, Size size) {
+
+    for (Face face in faces) {
+
+      canvas.drawImageRect(
+          coverImage,
+          Offset.zero & Size(coverImage.width.toDouble(), coverImage.height.toDouble()),
+          Offset(face.boundingBox.left, face.boundingBox.top) & Size(face.boundingBox.width, face.boundingBox.height),
+          Paint());
+
+    }
+
+    for (TextLine textLine in textLines) {
+
+      canvas.drawImageRect(
+          coverImage,
+          Offset.zero & Size(coverImage.width.toDouble(), coverImage.height.toDouble()),
+          Offset(textLine.rect.left, textLine.rect.top) & Size(textLine.rect.width, textLine.rect.height),
+          Paint());
 
     }
 
