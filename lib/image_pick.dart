@@ -59,9 +59,6 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
           child: OutlinedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                // if (states.contains(MaterialState.disabled)) {
-                //   return const Color(0xff7f53ac);
-                // }
                 return const Color(0xff647dee);
               }),),
             onPressed: () {
@@ -134,13 +131,6 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
           style: TextStyle(
               fontFamily: 'SCDream4'
           ),),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () {
-        //         send(context, _image);
-        //         },
-        //       icon: const Icon(Icons.arrow_forward_ios))
-        // ],
       ),
       body: Center(child: imageFile != null ? columnForImageReady() : columnForNoImage()),
     );

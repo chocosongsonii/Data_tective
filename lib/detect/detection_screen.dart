@@ -165,12 +165,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
     });
   }
 
-  // void removeFace(Face face) {
-  //   if (face.boundingBox.width >= widthAverage*0.8) {
-  //     faces.remove(face);
-  //   }
-  // }
-
   static const List<Map<String, dynamic>> stickers = <Map<String, dynamic>>[
     <String, dynamic>{
       'name': 'Bear',
@@ -340,15 +334,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
     });
   }
 
-  // void convertImageType() async {
-  //   var imageFile = await _stickerImage.readAsBytes();
-  //   ui.Image imageFile2 = await decodeImageFromList(imageFile);
-  //
-  //   setState(() {
-  //     stickerImage = imageFile2;
-  //   });
-  // }
-
   void _scaleStartGesture(ScaleStartDetails onStart) {
     setState(() {
       _start = onStart.focalPoint;
@@ -401,7 +386,7 @@ class _DetectionScreenState extends State<DetectionScreen> {
     if (byteData != null) {
       final result =
       await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-      _toastInfo(result.toString());
+      _toastInfo('이미지가 갤러리에 성공적으로 저장되었습니다.');
     }
     final directory = await getApplicationDocumentsDirectory();
     final image2 = File('${directory.path}/flutter.png');
@@ -416,13 +401,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
   }
 
   shareImage(BuildContext context) async {
-    // A builder is used to retrieve the context immediately
-    // surrounding the ElevatedButton.
-    //
-    // The context's `findRenderObject` returns the first
-    // RenderObject in its descendent tree when it's not
-    // a RenderObjectWidget. The ElevatedButton's RenderObject
-    // has its position and size after it's built.
     final RenderBox box = context.findRenderObject() as RenderBox;
 
     RenderRepaintBoundary boundary =
@@ -439,8 +417,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
 
     if (imagePaths.isNotEmpty) {
       await Share.shareFiles(imagePaths,
-          // text: text,
-          // subject: subject,
           sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
     }
   }
@@ -1182,20 +1158,6 @@ class _DetectionScreenState extends State<DetectionScreen> {
               },)
         ]
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // _saveScreen();
-      //     shareImage(context);
-      //     setState(() {
-      //       alertVisibility = false;
-      //       if (imagePaths.isNotEmpty) {
-      //         imagePaths.clear();
-      //       }
-      //     });
-      //   },
-      //   tooltip: 'Select',
-      //   child: const Icon(Icons.image),
-      // ),
     );
   }
 }
@@ -1494,10 +1456,6 @@ class ImageGallerySaver {
   static const MethodChannel _channel =
   MethodChannel('image_gallery_saver');
 
-  /// save image to Gallery
-  /// imageBytes can't null
-  /// return Map type
-  /// for example:{"isSuccess":true, "filePath":String?}
   static FutureOr<dynamic> saveImage(Uint8List imageBytes,
       {int quality = 80,
         String name,
@@ -1513,7 +1471,6 @@ class ImageGallerySaver {
     return result;
   }
 
-  /// Save the PNG，JPG，JPEG image or video located at [file] to the local device media gallery.
   static Future saveFile(String file, {String name, bool isReturnPathOfIOS = false}) async {
     assert(file != null);
     final result = await _channel.invokeMethod(

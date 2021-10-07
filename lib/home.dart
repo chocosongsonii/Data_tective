@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
                               ),
                             )));
                           },
-                          child: Text('라이선스 보러 가기 >',
+                          child: const Text('라이선스 보러 가기 >',
                             style: TextStyle(
                               fontFamily: 'SCDream6',
                               color: Colors.black,
