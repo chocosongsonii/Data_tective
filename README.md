@@ -106,7 +106,7 @@ faces.removeWhere((face) => toRemoveFace.contains(face));
 
 스티커를 선택하면 여러 스티커들 중 마음에 드는 스티커를 사용하여 검열을 할 수 있습니다.
 
-(스티커 사용하는 git올리기)
+![SM-N950N_20211008-152425_1 1](https://user-images.githubusercontent.com/88924667/136510216-a5269050-72a2-42a1-9c99-b189731805fa.gif)
 
 ------------
 
