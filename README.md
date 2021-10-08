@@ -101,7 +101,8 @@ faces.removeWhere((face) => toRemoveFace.contains(face));
 
 블러를 선택하면 슬라이더를 이용하여 블러강도를 조절할 수 있습니다.
 
-(https://user-images.githubusercontent.com/88924667/136510009-1de20698-7200-4b4c-acf5-5c4c50f3e779.gif)
+![SM-N950N_20211008-152402_1 1](https://user-images.githubusercontent.com/88924667/136510009-1de20698-7200-4b4c-acf5-5c4c50f3e779.gif)
+
 
 스티커를 선택하면 여러 스티커들 중 마음에 드는 스티커를 사용하여 검열을 할 수 있습니다.
 
